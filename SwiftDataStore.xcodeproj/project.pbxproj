@@ -15,6 +15,9 @@
 		856BE77D1E46430700298F09 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 856BE7571E4642F500298F09 /* Quick.framework */; };
 		856BE77E1E46430D00298F09 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 856BE7701E4642F900298F09 /* Reachability.framework */; };
 		856BE77F1E46431100298F09 /* Pluralize.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 856BE73C1E4642F100298F09 /* Pluralize.framework */; };
+		856BE7B31E4648B000298F09 /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE7B21E4648B000298F09 /* StoreTests.swift */; };
+		856BE7B51E46490300298F09 /* AdapterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE7B41E46490300298F09 /* AdapterTests.swift */; };
+		856BE7B71E464A1200298F09 /* SerializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE7B61E464A1200298F09 /* SerializerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -267,16 +270,19 @@
 
 /* Begin PBXFileReference section */
 		856BE6EB1E463DA500298F09 /* SwiftDataStore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftDataStore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		856BE6EE1E463DA500298F09 /* SwiftDataStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftDataStore.h; sourceTree = "<group>"; };
-		856BE6EF1E463DA500298F09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		856BE6EE1E463DA500298F09 /* SwiftDataStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwiftDataStore.h; path = Sources/SwiftDataStore/SwiftDataStore.h; sourceTree = "<group>"; };
+		856BE6EF1E463DA500298F09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Sources/SwiftDataStore/Info.plist; sourceTree = "<group>"; };
 		856BE6F41E463DA600298F09 /* SwiftDataStoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftDataStoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		856BE6F91E463DA600298F09 /* SwiftDataStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataStoreTests.swift; sourceTree = "<group>"; };
-		856BE6FB1E463DA600298F09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		856BE6F91E463DA600298F09 /* SwiftDataStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SwiftDataStoreTests.swift; path = Tests/SwiftDataStoreTests/SwiftDataStoreTests.swift; sourceTree = "<group>"; };
+		856BE6FB1E463DA600298F09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Tests/SwiftDataStoreTests/Info.plist; sourceTree = "<group>"; };
 		856BE7061E4642E700298F09 /* Nimble.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nimble.xcodeproj; path = Carthage/Checkouts/Nimble/Nimble.xcodeproj; sourceTree = "<group>"; };
 		856BE71B1E4642ED00298F09 /* OHHTTPStubs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OHHTTPStubs.xcodeproj; path = Carthage/Checkouts/OHHTTPStubs/OHHTTPStubs/OHHTTPStubs.xcodeproj; sourceTree = "<group>"; };
 		856BE7361E4642F100298F09 /* Pluralize.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pluralize.xcodeproj; path = Carthage/Checkouts/Pluralize.swift/Pluralize.xcodeproj; sourceTree = "<group>"; };
 		856BE73F1E4642F500298F09 /* Quick.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Quick.xcodeproj; path = Carthage/Checkouts/Quick/Quick.xcodeproj; sourceTree = "<group>"; };
 		856BE7661E4642F900298F09 /* Reachability.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Reachability.xcodeproj; path = Carthage/Checkouts/Reachability.swift/Reachability.xcodeproj; sourceTree = "<group>"; };
+		856BE7B21E4648B000298F09 /* StoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StoreTests.swift; path = Tests/SwiftDataStoreTests/StoreTests.swift; sourceTree = SOURCE_ROOT; };
+		856BE7B41E46490300298F09 /* AdapterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AdapterTests.swift; path = Tests/SwiftDataStoreTests/AdapterTests.swift; sourceTree = SOURCE_ROOT; };
+		856BE7B61E464A1200298F09 /* SerializerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SerializerTests.swift; path = Tests/SwiftDataStoreTests/SerializerTests.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -336,6 +342,9 @@
 			children = (
 				856BE6F91E463DA600298F09 /* SwiftDataStoreTests.swift */,
 				856BE6FB1E463DA600298F09 /* Info.plist */,
+				856BE7B21E4648B000298F09 /* StoreTests.swift */,
+				856BE7B41E46490300298F09 /* AdapterTests.swift */,
+				856BE7B61E464A1200298F09 /* SerializerTests.swift */,
 			);
 			path = SwiftDataStoreTests;
 			sourceTree = "<group>";
@@ -485,6 +494,7 @@
 					856BE6EA1E463DA500298F09 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 85WVA6M8B6;
+						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 					};
 					856BE6F31E463DA600298F09 = {
@@ -818,6 +828,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				856BE7B31E4648B000298F09 /* StoreTests.swift in Sources */,
+				856BE7B71E464A1200298F09 /* SerializerTests.swift in Sources */,
+				856BE7B51E46490300298F09 /* AdapterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -942,6 +955,7 @@
 		856BE7001E463DA600298F09 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 85WVA6M8B6;
@@ -954,6 +968,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ahmedonawale.SwiftDataStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -961,6 +976,7 @@
 		856BE7011E463DA600298F09 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 85WVA6M8B6;
@@ -980,6 +996,7 @@
 		856BE7031E463DA600298F09 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 85WVA6M8B6;
 				INFOPLIST_FILE = SwiftDataStoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -992,6 +1009,7 @@
 		856BE7041E463DA600298F09 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 85WVA6M8B6;
 				INFOPLIST_FILE = SwiftDataStoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
