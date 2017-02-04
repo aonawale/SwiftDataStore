@@ -8,6 +8,7 @@
 
 import Quick
 import Nimble
+@testable import SwiftDataStore
 
 class SerializerTests: SwiftDataStoreTests {
     override func spec() {
@@ -23,7 +24,7 @@ class SerializerTests: SwiftDataStoreTests {
             
             it("Serializes record") {
                 let serializer = JSONSerializer()
-                let serialzed = serializer.serialize(record: User(id: ID(1), name: "Foo"))
+                let serialzed = serializer.serialize(record: User(id: 1, name: "Foo"))
                 expect(serialzed).toNot(beNil())
             }
         }

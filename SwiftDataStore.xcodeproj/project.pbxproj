@@ -8,16 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		856BE6F51E463DA600298F09 /* SwiftDataStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 856BE6EB1E463DA500298F09 /* SwiftDataStore.framework */; };
-		856BE6FA1E463DA600298F09 /* SwiftDataStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE6F91E463DA600298F09 /* SwiftDataStoreTests.swift */; };
-		856BE6FC1E463DA600298F09 /* SwiftDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 856BE6EE1E463DA500298F09 /* SwiftDataStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		856BE77B1E4642FD00298F09 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 856BE7141E4642E800298F09 /* Nimble.framework */; };
 		856BE77C1E46430300298F09 /* OHHTTPStubs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 856BE72B1E4642EE00298F09 /* OHHTTPStubs.framework */; };
 		856BE77D1E46430700298F09 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 856BE7571E4642F500298F09 /* Quick.framework */; };
 		856BE77E1E46430D00298F09 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 856BE7701E4642F900298F09 /* Reachability.framework */; };
 		856BE77F1E46431100298F09 /* Pluralize.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 856BE73C1E4642F100298F09 /* Pluralize.framework */; };
-		856BE7B31E4648B000298F09 /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE7B21E4648B000298F09 /* StoreTests.swift */; };
-		856BE7B51E46490300298F09 /* AdapterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE7B41E46490300298F09 /* AdapterTests.swift */; };
-		856BE7B71E464A1200298F09 /* SerializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE7B61E464A1200298F09 /* SerializerTests.swift */; };
+		856BE93A1E467E7F00298F09 /* SwiftDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 856BE9391E467E7F00298F09 /* SwiftDataStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		856BE93C1E467EA700298F09 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE93B1E467EA700298F09 /* Model.swift */; };
+		856BE93E1E467EC700298F09 /* Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE93D1E467EC700298F09 /* Adapter.swift */; };
+		856BE9401E467EDB00298F09 /* Serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE93F1E467EDB00298F09 /* Serializer.swift */; };
+		856BE9421E467EE300298F09 /* WebClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE9411E467EE300298F09 /* WebClient.swift */; };
+		856BE9441E467F1C00298F09 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE9431E467F1C00298F09 /* Store.swift */; };
+		856BE9461E467F6300298F09 /* RecordSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE9451E467F6300298F09 /* RecordSet.swift */; };
+		856BE9471E4681F700298F09 /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE7B21E4648B000298F09 /* StoreTests.swift */; };
+		856BE9481E4681FB00298F09 /* AdapterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE7B41E46490300298F09 /* AdapterTests.swift */; };
+		856BE9491E46820000298F09 /* SerializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE7B61E464A1200298F09 /* SerializerTests.swift */; };
+		856BE94B1E46847500298F09 /* SwiftDataStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE94A1E46847400298F09 /* SwiftDataStoreTests.swift */; };
+		856BE94F1E4697BE00298F09 /* Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE94E1E4697BE00298F09 /* Snapshot.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -283,6 +290,15 @@
 		856BE7B21E4648B000298F09 /* StoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StoreTests.swift; path = Tests/SwiftDataStoreTests/StoreTests.swift; sourceTree = SOURCE_ROOT; };
 		856BE7B41E46490300298F09 /* AdapterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AdapterTests.swift; path = Tests/SwiftDataStoreTests/AdapterTests.swift; sourceTree = SOURCE_ROOT; };
 		856BE7B61E464A1200298F09 /* SerializerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SerializerTests.swift; path = Tests/SwiftDataStoreTests/SerializerTests.swift; sourceTree = SOURCE_ROOT; };
+		856BE9391E467E7F00298F09 /* SwiftDataStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwiftDataStore.h; path = Sources/SwiftDataStore/SwiftDataStore.h; sourceTree = "<group>"; };
+		856BE93B1E467EA700298F09 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Model.swift; path = Sources/SwiftDataStore/Model.swift; sourceTree = SOURCE_ROOT; };
+		856BE93D1E467EC700298F09 /* Adapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Adapter.swift; path = Sources/SwiftDataStore/Adapter.swift; sourceTree = SOURCE_ROOT; };
+		856BE93F1E467EDB00298F09 /* Serializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Serializer.swift; path = Sources/SwiftDataStore/Serializer.swift; sourceTree = SOURCE_ROOT; };
+		856BE9411E467EE300298F09 /* WebClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebClient.swift; path = Sources/SwiftDataStore/WebClient.swift; sourceTree = SOURCE_ROOT; };
+		856BE9431E467F1C00298F09 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Store.swift; path = Sources/SwiftDataStore/Store.swift; sourceTree = SOURCE_ROOT; };
+		856BE9451E467F6300298F09 /* RecordSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecordSet.swift; path = Sources/SwiftDataStore/RecordSet.swift; sourceTree = SOURCE_ROOT; };
+		856BE94A1E46847400298F09 /* SwiftDataStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SwiftDataStoreTests.swift; path = Tests/SwiftDataStoreTests/SwiftDataStoreTests.swift; sourceTree = "<group>"; };
+		856BE94E1E4697BE00298F09 /* Snapshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Snapshot.swift; path = Sources/SwiftDataStore/Snapshot.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -312,6 +328,8 @@
 		856BE6E11E463DA500298F09 = {
 			isa = PBXGroup;
 			children = (
+				856BE94A1E46847400298F09 /* SwiftDataStoreTests.swift */,
+				856BE9391E467E7F00298F09 /* SwiftDataStore.h */,
 				856BE6ED1E463DA500298F09 /* SwiftDataStore */,
 				856BE6F81E463DA600298F09 /* SwiftDataStoreTests */,
 				856BE6EC1E463DA500298F09 /* Products */,
@@ -333,6 +351,13 @@
 			children = (
 				856BE6EE1E463DA500298F09 /* SwiftDataStore.h */,
 				856BE6EF1E463DA500298F09 /* Info.plist */,
+				856BE93B1E467EA700298F09 /* Model.swift */,
+				856BE93D1E467EC700298F09 /* Adapter.swift */,
+				856BE93F1E467EDB00298F09 /* Serializer.swift */,
+				856BE9411E467EE300298F09 /* WebClient.swift */,
+				856BE9431E467F1C00298F09 /* Store.swift */,
+				856BE9451E467F6300298F09 /* RecordSet.swift */,
+				856BE94E1E4697BE00298F09 /* Snapshot.swift */,
 			);
 			path = SwiftDataStore;
 			sourceTree = "<group>";
@@ -437,7 +462,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				856BE6FC1E463DA600298F09 /* SwiftDataStore.h in Headers */,
+				856BE93A1E467E7F00298F09 /* SwiftDataStore.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -828,9 +853,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				856BE7B31E4648B000298F09 /* StoreTests.swift in Sources */,
-				856BE7B71E464A1200298F09 /* SerializerTests.swift in Sources */,
-				856BE7B51E46490300298F09 /* AdapterTests.swift in Sources */,
+				856BE9401E467EDB00298F09 /* Serializer.swift in Sources */,
+				856BE9461E467F6300298F09 /* RecordSet.swift in Sources */,
+				856BE9441E467F1C00298F09 /* Store.swift in Sources */,
+				856BE9421E467EE300298F09 /* WebClient.swift in Sources */,
+				856BE93E1E467EC700298F09 /* Adapter.swift in Sources */,
+				856BE93C1E467EA700298F09 /* Model.swift in Sources */,
+				856BE94F1E4697BE00298F09 /* Snapshot.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -838,7 +867,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				856BE6FA1E463DA600298F09 /* SwiftDataStoreTests.swift in Sources */,
+				856BE94B1E46847500298F09 /* SwiftDataStoreTests.swift in Sources */,
+				856BE9481E4681FB00298F09 /* AdapterTests.swift in Sources */,
+				856BE9491E46820000298F09 /* SerializerTests.swift in Sources */,
+				856BE9471E4681F700298F09 /* StoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -962,7 +994,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = SwiftDataStore/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/SwiftDataStore/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ahmedonawale.SwiftDataStore;
@@ -983,7 +1015,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = SwiftDataStore/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/SwiftDataStore/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ahmedonawale.SwiftDataStore;
@@ -998,7 +1030,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 85WVA6M8B6;
-				INFOPLIST_FILE = SwiftDataStoreTests/Info.plist;
+				INFOPLIST_FILE = Tests/SwiftDataStoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ahmedonawale.SwiftDataStoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1011,7 +1043,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 85WVA6M8B6;
-				INFOPLIST_FILE = SwiftDataStoreTests/Info.plist;
+				INFOPLIST_FILE = Tests/SwiftDataStoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ahmedonawale.SwiftDataStoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
