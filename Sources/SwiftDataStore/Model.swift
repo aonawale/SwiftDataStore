@@ -6,7 +6,7 @@
 //  Copyright © 2017 Ahmed Onawale. All rights reserved.
 //
 
-/// Unique Model identifier
+/// Unique Model identifier.
 /// Conforms to Hashable protocol
 public struct ID: Hashable {
     /// The underlying value of `Self`
@@ -25,8 +25,8 @@ public struct ID: Hashable {
     
     /// Initializer
     /// - Parameter value: Any type thats conforms to the
-    /// CustomStringConvertible protocol
-    init<T: CustomStringConvertible>(_ value: T) {
+    /// CustomStringConvertible protocol    
+    init(_ value: CustomStringConvertible) {
         self.value = String(describing: value)
     }
 }
