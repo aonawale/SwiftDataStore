@@ -10,7 +10,7 @@ import Quick
 import OHHTTPStubs
 @testable import SwiftDataStore
 
-struct UserAdapter: AdapterType {
+struct AuthorAdapter: AdapterType {
     var host: String {
         return "jsonplaceholder.typicode.com"
     }
@@ -34,7 +34,29 @@ struct User: Model {
     }
     
     static var adapterClass: AdapterType.Type {
-        return UserAdapter.self
+        return AuthorAdapter.self
+    }
+}
+
+struct Post: Model {
+    let id: ID
+    let title: String
+    let body: String?
+    
+    init(id: ID, hash: JSON) {
+        self.id = id
+        title = hash["title"] as! String
+        body = hash["body"] as? String
+    }
+    
+    init(id: Int, title: String) {
+        self.id = ID(id)
+        self.title = title
+        self.body = nil
+    }
+    
+    static var adapterClass: AdapterType.Type {
+        return AuthorAdapter.self
     }
 }
 
