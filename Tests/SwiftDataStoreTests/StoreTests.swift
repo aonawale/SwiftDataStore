@@ -12,7 +12,7 @@ import Nimble
 
 class StoreTests: SwiftDataStoreTests {
     override func spec() {
-        describe("find resource: - `User`") {
+        describe("find resource") {
             var user: User?
             var users: RecordArray<User>?
             var error: Error?
@@ -55,7 +55,7 @@ class StoreTests: SwiftDataStoreTests {
             }
         }
         
-        describe("Peek resource - `User`") {
+        describe("Peek records") {
             context("when the record is loaded in the store") {
                 beforeEach {
                     // preload users into the store
@@ -90,30 +90,43 @@ class StoreTests: SwiftDataStoreTests {
             }
         }
         
-        describe("loading and unloading resources - `User`") {
+        describe("loading and unloading records") {
             afterEach {
                 self.store.unload(all: User.self)
             }
             
-            it("push a record into the store") {
-                let user = self.store.push(record: User(id: 1, name: "Foo"))
-                expect(user).toNot(beNil())
-                expect(user.id).toEventually(equal(ID(1)))
+            context("when unloading records") {
+                it("unloads all record Type") {
+                    let users = [User(id: 3, name: "Baz"), User(id: 4, name: "Foo")]
+                    let posts = [Post(id: 2, title: "Blog"), Post(id: 8, title: "Post")]
+                    self.store.push(records: users)
+                    self.store.push(records: posts)
+                    expect(self.store.peek(all: User.self)).to(haveCount(2))
+                    expect(self.store.peek(all: Post.self)).to(haveCount(2))
+                    self.store.unload(all: User.self)
+                    expect(self.store.peek(all: User.self)).to(haveCount(0))
+                    expect(self.store.peek(all: Post.self)).to(haveCount(2))
+                    self.store.unload(all: Post.self)
+                    expect(self.store.peek(all: Post.self)).to(haveCount(0))
+                }
+                
+                it("unloads specified record") {
+                    let users = [User(id: 3, name: "Baz"), User(id: 4, name: "Foo")]
+                    self.store.push(records: users)
+                    expect(self.store.peek(all: User.self)).to(haveCount(2))
+                    self.store.unload(record: User(id: 3, name: "Baz"))
+                    expect(self.store.peek(all: User.self)).to(haveCount(1))
+                }
             }
             
-            it("push multiple records into the store") {
-                let users = self.store.push(records: [User(id: 1, name: "Foo"), User(id: 2, name: "Boo")])
-                expect(users).to(haveCount(2))
-            }
-            
-            it("unloads all record Type") {
-                let records: [Model] = [User(id: 3, name: "Baz"), User(id: 4, name: "Foo"), Post(id: 1, title: "Bar")]
-                self.store.push(records: records)
-                expect(self.store.peek(all: User.self)).to(haveCount(3))
-            }
-            
-            context("does not duplicate records with the same id") {
-                it("when pushing records multiple times") {
+            context("when loading records sequencially") {
+                it("push a record into the store") {
+                    let user = self.store.push(record: User(id: 1, name: "Foo"))
+                    expect(user).toNot(beNil())
+                    expect(user.id).toEventually(equal(ID(1)))
+                }
+                
+                it("does not duplicate records with the same id") {
                     self.store.push(record: User(id: 1, name: "Foo"))
                     self.store.push(record: User(id: 1, name: "Bar"))
                     self.store.push(record: User(id: 1, name: "Baz"))
@@ -121,15 +134,21 @@ class StoreTests: SwiftDataStoreTests {
                     expect(users).to(haveCount(1))
                     expect(users.first?.name).to(equal("Baz"))
                 }
+            }
+            
+            context("when loading records in batches") {
+                it("pushes multiple records into the store") {
+                    let users = self.store.push(records: [User(id: 1, name: "Foo"), User(id: 2, name: "Boo")])
+                    expect(users).to(haveCount(2))
+                }
                 
-                it("when pushing mutiple records at once") {
+                it("does not duplicate records with the same id") {
                     self.store.push(records: [User(id: 1, name: "Baz"), User(id: 4, name: "Foo"), User(id: 1, name: "Bar")])
                     let users = self.store.peek(all: User.self)
                     expect(users).to(haveCount(2))
                     expect(self.store.peek(record: User.self, id: ID(1))?.name).to(equal("Bar"))
                 }
             }
-            
             
         }
     }
