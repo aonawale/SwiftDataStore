@@ -58,9 +58,9 @@ public extension AdapterType {
         return String(describing: Type).lowercased().pluralize()
     }
     
-    private func buildURL<T: Model>(for Model: T.Type, id: ID?) -> URL {
-        guard let _id = id else { return URL(scheme: scheme, host: host, path: path(for: Model)) }
-        return URL(scheme: scheme, host: host, path: "/\(path(for: Model))/\(_id.value)")
+    private func buildURL<T: Model>(for Type: T.Type, id: ID?) -> URL {
+        guard let _id = id else { return URL(scheme: scheme, host: host, path: path(for: Type)) }
+        return URL(scheme: scheme, host: host, path: "/\(path(for: Type))/\(_id.value)")
     }
     
     func buildURL<T: Model>(for Type: T.Type, id: ID?, snapshot: Snapshot?, requestType: RequestType, query: JSON?) -> URL {
@@ -100,7 +100,7 @@ public extension AdapterType {
     
     func create<T: Model>(record Type: T.Type, snapshot: Snapshot, completion: @escaping NetworkCompletion) {
         let url = buildURL(for: Type, id: nil, snapshot: snapshot, requestType: .createRecord, query: nil)
-        return client.load(url: url, method: .post, completion: completion)
+        return client.load(url: url, method: .post(snapshot), completion: completion)
     }
 }
 

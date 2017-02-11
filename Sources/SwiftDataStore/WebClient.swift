@@ -8,22 +8,39 @@
 
 import Reachability
 
-public enum HTTPMethod: String {
-    case get = "GET"
-    case post = "POST"
-    case put = "PUT"
-    case patch = "PATCH"
-    case delete = "DELETE"
+public enum HTTPMethod<Body> {
+    case get
+    case post(Body)
+    case put(Body)
+    case patch(Body)
+    case delete
+}
+
+extension HTTPMethod {
+    var name: String {
+        switch self {
+        case .get:
+            return "GET"
+        case .post:
+            return "POST"
+        case .put:
+            return "PUT"
+        case .patch:
+            return "PATCH"
+        case .delete:
+            return "DELETE"
+        }
+    }
 }
 
 public protocol NetworkType {
     var baseURL: String { get }
     init(baseUrl: String)
-    func load(url: URL, method: HTTPMethod, params: JSON, headers: [String: String], completion: @escaping NetworkCompletion)
+    func load(url: URL, method: HTTPMethod<Any>, headers: [String: String], completion: @escaping NetworkCompletion)
 }
 
 public extension NetworkType {
-    func load(url: URL, method: HTTPMethod, params: JSON = [:], headers: [String: String] = [:], completion: @escaping NetworkCompletion) {
+    func load(url: URL, method: HTTPMethod<Any>, headers: [String: String] = [:], completion: @escaping NetworkCompletion) {
         // Create Reachability instance
         let reachability = Reachability()!
         
@@ -33,7 +50,7 @@ public extension NetworkType {
         }
         
         // Creating the URLRequest object
-        let request = URLRequest(url: url, method: method, params: params, headers: headers)
+        let request = URLRequest(url: url, method: method, headers: headers)
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             // make sure there is no error
@@ -82,13 +99,13 @@ public extension URL {
 }
 
 public extension URLRequest {
-    init(url: URL, method: HTTPMethod, params: JSON, headers: [String: String]) {
+    init(url: URL, method: HTTPMethod<Any>, headers: [String: String]) {
         self.init(url: url)
-        httpMethod = method.rawValue
+        httpMethod = method.name
         allHTTPHeaderFields = headers
         switch method {
-        case .post, .put:
-            httpBody = try! JSONSerialization.data(withJSONObject: params, options: [])
+        case .post(let body), .put(let body), .patch(let body):
+            httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
         default:
             break
         }

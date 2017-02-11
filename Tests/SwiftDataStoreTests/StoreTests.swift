@@ -10,6 +10,16 @@ import Quick
 import Nimble
 @testable import SwiftDataStore
 
+/// Custome matcher for performing equality on records
+public func beUser<T: Model>(_ expectedValue: T?) -> MatcherFunc<T> {
+    return MatcherFunc { actualExpression, failureMessage in
+        failureMessage.postfixMessage = "equal <\(expectedValue)>"
+        guard let actualValue = try actualExpression.evaluate(),
+            let expectedValue = expectedValue else { return false }
+        return actualValue == expectedValue
+    }
+}
+
 class StoreTests: SwiftDataStoreTests {
     override func spec() {
         describe("find resource") {
@@ -147,6 +157,23 @@ class StoreTests: SwiftDataStoreTests {
                     let users = self.store.peek(all: User.self)
                     expect(users).to(haveCount(2))
                     expect(self.store.peek(record: User.self, id: ID(1))?.name).to(equal("Bar"))
+                }
+            }
+            
+            context("when pushing raw JSON data") {
+                it("pushes a sngle JSON object") {
+                    let json = ["id":"1", "email": "foo@bar.com", "name": "foo"]
+                    let user = try? self.store.push(payload: json, for: User.self)
+                    expect(user).notTo(beNil())
+                    expect(user?.id).to(equal(ID(1)))
+                    expect(self.store.peek(record: User.self, id: ID(1))).to(beUser(user))
+                }
+                
+                it("pushes an array of JSON objects") {
+                    let json = [["id":"1", "email": "foo@bar.com", "name": "foo"], ["id":"2", "name": "foo"], ["id":"3", "name": "foo"]]
+                    let users = try? self.store.push(payload: json, for: User.self)
+                    expect(users).to(haveCount(3))
+                    expect(self.store.peek(all: User.self)).to(haveCount(3))
                 }
             }
             

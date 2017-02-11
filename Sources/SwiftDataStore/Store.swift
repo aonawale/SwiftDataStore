@@ -147,6 +147,19 @@ public final class Store {
         return RecordArray(try payload.map { try push(payload: $0, for: Type) })
     }
     
+    /**
+        Push a raw `JSON` payload into the store.
+        This method can be used both to push in brand new
+        records, as well as to update existing records.
+        - Parameters:
+            - payload: The payload to push ito the store.
+            - for: The type class of the payload being pushed.
+        - Returns: A record of the pushed payload.
+     
+        ```
+     
+        ```
+    */
     @discardableResult func push<T: Model>(payload: JSON, for Type: T.Type) throws -> T {
         do {
             let record = try serializer(for: Type).normalize(Type: Type, hash: payload)
@@ -156,34 +169,64 @@ public final class Store {
         }
     }
     
+    /// Push a records into the store.
+    /// - Parameter record: The record to push ito the store.
+    /// - Returns: The pushed records.
     @discardableResult func push<T: Model>(record: T) -> T {
         return recordManager.load(record)
     }
     
+    /// Push some records into the store.
+    /// - Parameter records: The records to push ito the store.
+    /// - Returns: A `RecordArray` of the pushed records.
     @discardableResult func push<S: Sequence & Collection, T: Model>(records: S) -> RecordArray<T> where S.Iterator.Element == T {
         return RecordArray(records.map { self.push(record: $0) })
     }
     
+    /// This method returns an instance of serializer for the specified type.
+    /// - Parameter for: The record type class.
+    /// - Returns: An instance of serializer for the specified type.
     func serializer<T: Model>(for Type: T.Type) -> SerializerType {
         return instanceCache.get(cacheType: .serializer, Type: Type) as! SerializerType
     }
     
+    /// This method returns an instance of adapter for the specified type.
+    /// - Parameter for: The record type class.
+    /// - Returns: An instance of adapter for the specified type.
     func adapter<T: Model>(for Type: T.Type) -> AdapterType {
         return instanceCache.get(cacheType: .adapter, Type: Type) as! AdapterType
     }
     
+    /// This method will remove the records from the store.
+    /// - Parameter record: The record to remove.
     func unload<T: Model>(record: T) {
         recordManager.clear(record)
     }
     
+    /// This method will remove all records of the given type from the store.
+    /// - Parameter all: The record type class.
     func unload<T: Model>(all Type: T.Type) {
         recordManager.clear(Type)
     }
     
+    /// This method will synchronously return all records for the specified type
+    /// in the store. It will not make a request to fetch records from the server.
+    /// Multiple calls to this function with the same record type will always return
+    /// the same records.
+    /// - Parameter all: The record type class.
+    /// - Returns: A `RecordArray` of the specified type.
     func peek<T: Model>(all Type: T.Type) -> RecordArray<T> {
         return RecordArray(recordManager.get(Type))
     }
     
+    /// This method will synchronously return the record with the specifed id from
+    /// the store if it's available, otherwise it will return `nil`. A record is
+    /// available if it has been fetched earlier, or pushed manually into the store.
+    /// - Complexity: O(1)
+    /// - Parameters:
+    ///     - record: The record type class.
+    ///     - id: The id of the record.
+    /// - Returns: A Record if it's available in the store, otherwise nil.
     func peek<T: Model>(record Type: T.Type, id: ID) -> T? {
         return recordManager.get(Type, id: id)
     }
