@@ -13,24 +13,24 @@ public protocol Cacheable {
 }
 
 public enum RequestType {
-    case findRecord
     case findAll
-    case query
-    case queryRecord
-    case createRecord
-    case updateRecord
-    case deleteRecord
+    case find(record: ID)
+    case query([String: String])
+    case queryRecord([String: String])
+    case create(record: Record)
+    case update(record: Record)
+    case delete(record: Record)
 }
 
 public protocol AdapterType: Cacheable {
     var host: String { get }
     var namespace: String { get }
-    var headers: JSON { get }
+    var headers: [String: String] { get }
     var client: NetworkType { get }
-    func path<T: Model>(for Type: T.Type) -> String
-    func find<T: Model>(all Type: T.Type, completion: @escaping NetworkCompletion)
-    func find<T: Model>(record Type: T.Type, id: ID, completion: @escaping NetworkCompletion)
-    func create<T: Model>(record Type: T.Type, snapshot: Snapshot, completion: @escaping NetworkCompletion)
+    func path<T: Record>(for Type: T.Type) -> String
+    func find<T: Record>(all type: T.Type, completion: @escaping NetworkCompletion)
+    func find<T: Record>(record type: T.Type, id: ID, completion: @escaping NetworkCompletion)
+    func create<T: Record>(record: T, completion: @escaping NetworkCompletion)
 }
 
 public extension AdapterType {
@@ -50,57 +50,61 @@ public extension AdapterType {
         return ""
     }
     
-    var headers: JSON {
+    var headers: [String: String] {
         return [:]
     }
     
-    func path<T: Model>(for Type: T.Type) -> String {
-        return String(describing: Type).lowercased().pluralize()
+    func path<T: Record>(for type: T.Type) -> String {
+        return String(describing: type).lowercased().pluralize()
     }
     
-    private func buildURL<T: Model>(for Type: T.Type, id: ID?) -> URL {
-        guard let _id = id else { return URL(scheme: scheme, host: host, path: path(for: Type)) }
-        return URL(scheme: scheme, host: host, path: "/\(path(for: Type))/\(_id.value)")
+    func url<T: Record>(for type: T.Type, requestType: RequestType) -> URL {
+        return URL(scheme: scheme, host: host, path: path(for: type), requestType: requestType)
     }
     
-    func buildURL<T: Model>(for Type: T.Type, id: ID?, snapshot: Snapshot?, requestType: RequestType, query: JSON?) -> URL {
-        switch requestType {
-        case .findAll:
-            return urlForFind(all: Type)
-        case .createRecord:
-            return urlForCreate(record: Type)
-        case .findRecord where id != nil:
-            return urlForFind(record: Type, id: id!)
-        default:
-            return buildURL(for: Type, id: id)
-        }
+    func request(for url: URL, method: HTTPMethod<Any>) -> URLRequest {
+        return URLRequest(url: url, method: method, headers: headers)
     }
     
-    func urlForFind<T: Model>(all Type: T.Type) -> URL {
-        return buildURL(for: Type, id: nil)
+    func requestForFind<T: Record>(all type: T.Type) -> URLRequest {
+        return request(for: urlForFind(all: type), method: .get)
     }
     
-    func urlForFind<T: Model>(record Type: T.Type, id: ID) -> URL {
-        return buildURL(for: Type, id: id)
+    func requestForFind<T: Record>(record type: T.Type, id: ID) -> URLRequest {
+        return request(for: urlForFind(all: type), method: .get)
     }
     
-    func urlForCreate<T: Model>(record Type: T.Type) -> URL {
-        return buildURL(for: Type, id: nil)
+    func requestForCreate<T: Record>(record: T, type: T.Type) -> URLRequest {
+        return request(for: urlForFind(all: type), method: .post(record))
     }
     
-    func find<T: Model>(record Type: T.Type, id: ID, completion: @escaping NetworkCompletion) {
-        let url = buildURL(for: Type, id: id, snapshot: nil, requestType: .findRecord, query: nil)
-        return client.load(url: url, method: .get, completion: completion)
+    func urlForFind<T: Record>(all type: T.Type) -> URL {
+        return url(for: type, requestType: .findAll)
     }
     
-    func find<T: Model>(all Type: T.Type, completion: @escaping NetworkCompletion) {
-        let url = buildURL(for: Type, id: nil, snapshot: nil, requestType: .findAll, query: nil)
-        return client.load(url: url, method: .get, completion: completion)
+    func urlForFind<T: Record>(record type: T.Type, id: ID) -> URL {
+        return url(for: type, requestType: .find(record: id))
     }
     
-    func create<T: Model>(record Type: T.Type, snapshot: Snapshot, completion: @escaping NetworkCompletion) {
-        let url = buildURL(for: Type, id: nil, snapshot: snapshot, requestType: .createRecord, query: nil)
-        return client.load(url: url, method: .post(snapshot), completion: completion)
+    func urlForCreate<T: Record>(record: T, type: T.Type) -> URL {
+        return url(for: type, requestType: .create(record: record))
+    }
+    
+    func find<T: Record>(record type: T.Type, id: ID, completion: @escaping NetworkCompletion) {
+        let _request = request(for: urlForFind(record: type, id: id), method: .get)
+        return client.load(request: _request, completion: completion)
+    }
+    
+    func find<T: Record>(all type: T.Type, completion: @escaping NetworkCompletion) {
+        let _request = request(for: urlForFind(all: type), method: .get)
+        return client.load(request: _request, completion: completion)
+    }
+    
+    func create<T: Record>(record: T, completion: @escaping NetworkCompletion) {
+        let type = type(of: record)
+        let hash = Store.sharedStore.serializer(for: type).serialize(record: record, includeId: false)
+        let _request = request(for: urlForCreate(record: record, type: type), method: .post(hash))
+        return client.load(request: _request, completion: completion)
     }
 }
 

@@ -11,7 +11,7 @@ import Nimble
 @testable import SwiftDataStore
 
 /// Custome matcher for performing equality on records
-public func beUser<T: Model>(_ expectedValue: T?) -> MatcherFunc<T> {
+public func beUser<T: Record>(_ expectedValue: T?) -> MatcherFunc<T> {
     return MatcherFunc { actualExpression, failureMessage in
         failureMessage.postfixMessage = "equal <\(expectedValue)>"
         guard let actualValue = try actualExpression.evaluate(),
@@ -51,7 +51,6 @@ class StoreTests: SwiftDataStoreTests {
                     expect(error).toEventually(beNil())
                     expect(user).toEventuallyNot(beNil())
                     expect(user?.id).toEventually(equal(ID(2)))
-                    expect(user?.email).toEventually(beNil())
                 }
             }
             
@@ -133,7 +132,7 @@ class StoreTests: SwiftDataStoreTests {
                 it("push a record into the store") {
                     let user = self.store.push(record: User(id: 1, name: "Foo"))
                     expect(user).toNot(beNil())
-                    expect(user.id).toEventually(equal(ID(1)))
+                    expect(self.store.peek(all: User.self)).to(haveCount(1))
                 }
                 
                 it("does not duplicate records with the same id") {
@@ -148,8 +147,8 @@ class StoreTests: SwiftDataStoreTests {
             
             context("when loading records in batches") {
                 it("pushes multiple records into the store") {
-                    let users = self.store.push(records: [User(id: 1, name: "Foo"), User(id: 2, name: "Boo")])
-                    expect(users).to(haveCount(2))
+                    self.store.push(records: [User(id: 1, name: "Foo"), User(id: 2, name: "Boo")])
+                    expect(self.store.peek(all: User.self)).to(haveCount(2))
                 }
                 
                 it("does not duplicate records with the same id") {

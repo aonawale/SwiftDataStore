@@ -7,11 +7,11 @@
 //
 
 /// RecordSet
-/// Primary Model data store
+/// Primary Record data store
 /// Internally models are stored in a dictionary with type
 /// [modelId: model]
 public struct RecordSet {
-    public typealias Element = Model
+    public typealias Element = Record
     
     fileprivate var contents: [ID: Element] = [:]
     
@@ -145,7 +145,7 @@ extension RecordSet {
 }
 
 // MARK: Operators
-func +=<T: Model>(lhs: inout RecordSet, rhs: T) {
+func +=<T: Record>(lhs: inout RecordSet, rhs: T) {
     lhs.insert(rhs)
 }
 

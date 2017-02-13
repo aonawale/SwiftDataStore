@@ -36,11 +36,11 @@ extension HTTPMethod {
 public protocol NetworkType {
     var baseURL: String { get }
     init(baseUrl: String)
-    func load(url: URL, method: HTTPMethod<Any>, headers: [String: String], completion: @escaping NetworkCompletion)
+    func load(request: URLRequest, completion: @escaping NetworkCompletion)
 }
 
 public extension NetworkType {
-    func load(url: URL, method: HTTPMethod<Any>, headers: [String: String] = [:], completion: @escaping NetworkCompletion) {
+    func load(request: URLRequest, completion: @escaping NetworkCompletion) {
         // Create Reachability instance
         let reachability = Reachability()!
         
@@ -48,9 +48,6 @@ public extension NetworkType {
         if !reachability.isReachable {
             completion(nil, NetworkError.noInternetConnection)
         }
-        
-        // Creating the URLRequest object
-        let request = URLRequest(url: url, method: method, headers: headers)
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             // make sure there is no error
@@ -86,14 +83,21 @@ public struct WebClient: NetworkType {
 }
 
 public extension URL {
-    init(scheme: String = "https", host: String, path: String = "/", params: JSON = [:]) {
+    init(scheme: String = "https", host: String, path: String = "/", requestType: RequestType) {
         var components = URLComponents()
         components.scheme = scheme
         components.host = host
-        components.path = path.hasPrefix("/") ? path : "/" + path
-        components.queryItems = params.map {
-            URLQueryItem(name: $0.key, value: String(describing: $0.value))
+        var _path = "/\(path.remove(leading: "/", trailing: "/").trim())"
+        switch requestType {
+        case .find(record: let id):
+            _path = "\(_path)/\(id.value)"
+        case .query(let query), .queryRecord(let query):
+            components.queryItems = query.map { URLQueryItem(name: $0.key, value: $0.value) }
+        default:
+            break
         }
+        components.path = _path
+
         self = components.url!
     }
 }
@@ -104,7 +108,9 @@ public extension URLRequest {
         httpMethod = method.name
         allHTTPHeaderFields = headers
         switch method {
-        case .post(let body), .put(let body), .patch(let body):
+        case .post(let body as JSON), .put(let body as JSON), .patch(let body as JSON):
+            httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
+        case .post(let body as [Any]), .put(let body as [Any]), .patch(let body as [Any]):
             httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
         default:
             break

@@ -10,12 +10,12 @@ public protocol SerializerType: Cacheable {
     var primaryKey: String { get }
     func extract(id hash: JSON) -> ID?
     func extract(meta hash: JSON) -> JSON?
-    func serialize(record: Serializable, includeId: Bool) -> JSON
-    func serialize(records: [Serializable]) -> [JSON]
-    func normalize<T: Model>(Type: T.Type, hash: JSON) throws -> T
-    func normalize<T: Model>(Type: T.Type, hash: [JSON]) throws -> [T]
-    func normalize<T: Model>(response: JSON, for Type: T.Type, requestType: RequestType) throws -> T
-    func normalize<T: Model>(response: [JSON], for Type: T.Type, requestType: RequestType) throws -> RecordArray<T>
+    func serialize(record: Record, includeId: Bool) -> JSON
+    func serialize(records: [Record]) -> [JSON]
+    func normalize<T: Record>(Type: T.Type, hash: JSON) throws -> T
+    func normalize<T: Record>(Type: T.Type, hash: [JSON]) throws -> [T]
+    func normalize<T: Record>(response: JSON, for Type: T.Type, requestType: RequestType) throws -> T
+    func normalize<T: Record>(response: [JSON], for Type: T.Type, requestType: RequestType) throws -> RecordArray<T>
     func parse(_ response: Any?) throws -> JSON
     func parse(_ response: Any?) throws -> [JSON]
 }
@@ -34,21 +34,29 @@ public extension SerializerType {
         return ID(id)
     }
     
-    func normalize<T: Model>(Type: T.Type, hash: JSON) throws -> T {
+    func normalize<T: Record>(Type: T.Type, hash: JSON) throws -> T {
         guard let id = extract(id: hash) else { throw SerializerError.requireID }
         guard let normalized = Type.init(id: id, hash: hash) else { throw SerializerError.invalidJSON }
         return normalized
     }
     
-    func normalize<T: Model>(Type: T.Type, hash: [JSON]) throws -> [T] {
+    func normalize<T: Record>(Type: T.Type, hash: [JSON]) throws -> [T] {
         return try hash.map { try normalize(Type: Type, hash: $0) }
     }
     
-    func serialize(record: Serializable, includeId: Bool = false) -> JSON {
-        return record.JSONRepresentation
+    func serialize(id: ID) -> CustomStringConvertible {
+        return id.value
     }
     
-    func serialize(records: [Serializable]) -> [JSON] {
+    func serialize(record: Record, includeId: Bool = true) -> JSON {
+        var hash = record.toJSON()
+        if includeId {
+            hash[primaryKey] = serialize(id: record.id)
+        }
+        return hash
+    }
+    
+    func serialize(records: [Record]) -> [JSON] {
         return records.map { serialize(record: $0) }
     }
     
@@ -62,28 +70,28 @@ public extension SerializerType {
         return payload
     }
     
-    func normalizeFindAll<T: Model>(response: [JSON], for Type: T.Type) throws -> RecordArray<T> {
+    func normalizeFindAll<T: Record>(response: [JSON], for Type: T.Type) throws -> RecordArray<T> {
         return try normalizeArray(response: response, for: Type)
     }
     
-    func normalizeQuery<T: Model>(response: [JSON], for Type: T.Type) throws -> RecordArray<T> {
+    func normalizeQuery<T: Record>(response: [JSON], for Type: T.Type) throws -> RecordArray<T> {
         return try normalizeArray(response: response, for: Type)
     }
     
-    func normalizeArray<T: Model>(response: [JSON], for Type: T.Type) throws -> RecordArray<T> {
+    func normalizeArray<T: Record>(response: [JSON], for Type: T.Type) throws -> RecordArray<T> {
         let records = try normalize(Type: Type, hash: response)
         return RecordArray(records)
     }
     
-    func normalizeFindRecord<T: Model>(response: JSON, for Type: T.Type, requestType: RequestType) throws -> T {
+    func normalizeFindRecord<T: Record>(response: JSON, for Type: T.Type, requestType: RequestType) throws -> T {
         return try normalizeSingle(response: response, for: Type, requestType: requestType)
     }
     
-    func normalizeSingle<T: Model>(response: JSON, for Type: T.Type, requestType: RequestType) throws -> T {
+    func normalizeSingle<T: Record>(response: JSON, for Type: T.Type, requestType: RequestType) throws -> T {
         return try normalize(Type: Type, hash: response)
     }
     
-    func normalize<T: Model>(response: [JSON], for Type: T.Type, requestType: RequestType) throws -> RecordArray<T> {
+    func normalize<T: Record>(response: [JSON], for Type: T.Type, requestType: RequestType) throws -> RecordArray<T> {
         switch requestType {
         case .findAll:
             return try normalizeFindAll(response: response, for: Type)
@@ -94,9 +102,9 @@ public extension SerializerType {
         }
     }
     
-    func normalize<T: Model>(response: JSON, for Type: T.Type, requestType: RequestType) throws -> T {
+    func normalize<T: Record>(response: JSON, for Type: T.Type, requestType: RequestType) throws -> T {
         switch requestType {
-        case .findRecord:
+        case .find:
             return try normalizeFindRecord(response: response, for: Type, requestType: requestType)
         default:
             return try normalizeSingle(response: response, for: Type, requestType: requestType)

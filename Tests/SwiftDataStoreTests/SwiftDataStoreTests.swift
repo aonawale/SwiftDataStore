@@ -16,7 +16,7 @@ struct AuthorAdapter: AdapterType {
     }
 }
 
-struct User: Model {
+struct User: Record {
     let id: ID
     let name: String
     let email: String?
@@ -38,7 +38,7 @@ struct User: Model {
     }
 }
 
-struct Post: Model {
+struct Post: Record {
     let id: ID
     let title: String
     let body: String?
@@ -83,6 +83,23 @@ class SwiftDataStoreTests: QuickSpec {
                     let data = try! JSONSerialization.data(withJSONObject: users, options: .prettyPrinted)
                     return OHHTTPStubsResponse(data: data, statusCode: 200, headers: nil)
                 }
+            }
+            
+            /*
+                OHHTTPStubs limitation
+                OHHTTPStubs don't simulate data upload. The NSURLProtocolClient @protocol does
+                not provide a way to signal the delegate that data has been sent (only that some
+                has been loaded), so any data in the HTTPBody or HTTPBodyStream of an NSURLRequest,
+                or data provided to -[NSURLSession uploadTaskWithRequest:fromData:]; will be
+                ignored, and more importantly, the 
+                -URLSession:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend: 
+                delegate method will never be called when you stub the request using OHHTTPStubs
+            */
+            // Because of this limitation, we'll assume all POST request is a success
+            stub(condition: isHost("jsonplaceholder.typicode.com") && isMethodPOST()) { req in
+                let user = ["id":"1", "email": "foo@bar.com", "name": "foo"]
+                let data = try! JSONSerialization.data(withJSONObject: user, options: [])
+                return OHHTTPStubsResponse(data: data, statusCode: 200, headers: nil)
             }
         }
     }

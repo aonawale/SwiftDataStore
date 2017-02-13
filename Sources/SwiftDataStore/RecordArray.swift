@@ -9,7 +9,7 @@
 /// RecordArray: A wrapper around Swift `Array`
 /// with an additional `meta` property holding information
 /// about elements of the array
-public struct RecordArray<T: Model> {
+public struct RecordArray<T: Record> {
     typealias Element = T
     
     /// This property contains extra information about the

@@ -14,7 +14,7 @@
 		856BE77E1E46430D00298F09 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 856BE7701E4642F900298F09 /* Reachability.framework */; };
 		856BE77F1E46431100298F09 /* Pluralize.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 856BE73C1E4642F100298F09 /* Pluralize.framework */; };
 		856BE93A1E467E7F00298F09 /* SwiftDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 856BE9391E467E7F00298F09 /* SwiftDataStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		856BE93C1E467EA700298F09 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE93B1E467EA700298F09 /* Model.swift */; };
+		856BE93C1E467EA700298F09 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE93B1E467EA700298F09 /* Record.swift */; };
 		856BE93E1E467EC700298F09 /* Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE93D1E467EC700298F09 /* Adapter.swift */; };
 		856BE9401E467EDB00298F09 /* Serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE93F1E467EDB00298F09 /* Serializer.swift */; };
 		856BE9421E467EE300298F09 /* WebClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE9411E467EE300298F09 /* WebClient.swift */; };
@@ -28,6 +28,7 @@
 		856BE9511E46CB8500298F09 /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE9501E46CB8500298F09 /* Aliases.swift */; };
 		856BE9531E46CB8F00298F09 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE9521E46CB8F00298F09 /* Errors.swift */; };
 		856BE9551E46CCDB00298F09 /* RecordArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE9541E46CCDB00298F09 /* RecordArray.swift */; };
+		85B60D551E50E8D20089D55D /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B60D541E50E8D20089D55D /* String.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -294,7 +295,7 @@
 		856BE7B41E46490300298F09 /* AdapterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AdapterTests.swift; path = Tests/SwiftDataStoreTests/AdapterTests.swift; sourceTree = SOURCE_ROOT; };
 		856BE7B61E464A1200298F09 /* SerializerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SerializerTests.swift; path = Tests/SwiftDataStoreTests/SerializerTests.swift; sourceTree = SOURCE_ROOT; };
 		856BE9391E467E7F00298F09 /* SwiftDataStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwiftDataStore.h; path = Sources/SwiftDataStore/SwiftDataStore.h; sourceTree = "<group>"; };
-		856BE93B1E467EA700298F09 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Model.swift; path = Sources/SwiftDataStore/Model.swift; sourceTree = SOURCE_ROOT; };
+		856BE93B1E467EA700298F09 /* Record.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Record.swift; path = Sources/SwiftDataStore/Record.swift; sourceTree = SOURCE_ROOT; };
 		856BE93D1E467EC700298F09 /* Adapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Adapter.swift; path = Sources/SwiftDataStore/Adapter.swift; sourceTree = SOURCE_ROOT; };
 		856BE93F1E467EDB00298F09 /* Serializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Serializer.swift; path = Sources/SwiftDataStore/Serializer.swift; sourceTree = SOURCE_ROOT; };
 		856BE9411E467EE300298F09 /* WebClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebClient.swift; path = Sources/SwiftDataStore/WebClient.swift; sourceTree = SOURCE_ROOT; };
@@ -305,6 +306,7 @@
 		856BE9501E46CB8500298F09 /* Aliases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Aliases.swift; path = Sources/SwiftDataStore/Aliases.swift; sourceTree = SOURCE_ROOT; };
 		856BE9521E46CB8F00298F09 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Errors.swift; path = Sources/SwiftDataStore/Errors.swift; sourceTree = SOURCE_ROOT; };
 		856BE9541E46CCDB00298F09 /* RecordArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecordArray.swift; path = Sources/SwiftDataStore/RecordArray.swift; sourceTree = SOURCE_ROOT; };
+		85B60D541E50E8D20089D55D /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = String.swift; path = Sources/SwiftDataStore/String.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -357,7 +359,7 @@
 			children = (
 				856BE6EE1E463DA500298F09 /* SwiftDataStore.h */,
 				856BE6EF1E463DA500298F09 /* Info.plist */,
-				856BE93B1E467EA700298F09 /* Model.swift */,
+				856BE93B1E467EA700298F09 /* Record.swift */,
 				856BE93D1E467EC700298F09 /* Adapter.swift */,
 				856BE93F1E467EDB00298F09 /* Serializer.swift */,
 				856BE9411E467EE300298F09 /* WebClient.swift */,
@@ -367,6 +369,7 @@
 				856BE9501E46CB8500298F09 /* Aliases.swift */,
 				856BE9521E46CB8F00298F09 /* Errors.swift */,
 				856BE9541E46CCDB00298F09 /* RecordArray.swift */,
+				85B60D541E50E8D20089D55D /* String.swift */,
 			);
 			path = SwiftDataStore;
 			sourceTree = "<group>";
@@ -436,17 +439,17 @@
 			isa = PBXGroup;
 			children = (
 				856BE74F1E4642F500298F09 /* Quick.framework */,
-				856BE7511E4642F500298F09 /* Quick-macOSTests.xctest */,
-				856BE7531E4642F500298F09 /* QuickFocused-macOSTests.xctest */,
-				856BE7551E4642F500298F09 /* QuickAfterSuite-macOSTests.xctest */,
+				856BE7511E4642F500298F09 /* Quick - macOSTests.xctest */,
+				856BE7531E4642F500298F09 /* QuickFocused - macOSTests.xctest */,
+				856BE7551E4642F500298F09 /* QuickAfterSuite - macOSTests.xctest */,
 				856BE7571E4642F500298F09 /* Quick.framework */,
-				856BE7591E4642F500298F09 /* Quick-iOSTests.xctest */,
-				856BE75B1E4642F500298F09 /* QuickFocused-iOSTests.xctest */,
-				856BE75D1E4642F500298F09 /* QuickAfterSuite-iOSTests.xctest */,
+				856BE7591E4642F500298F09 /* Quick - iOSTests.xctest */,
+				856BE75B1E4642F500298F09 /* QuickFocused - iOSTests.xctest */,
+				856BE75D1E4642F500298F09 /* QuickAfterSuite - iOSTests.xctest */,
 				856BE75F1E4642F500298F09 /* Quick.framework */,
-				856BE7611E4642F500298F09 /* Quick-tvOSTests.xctest */,
-				856BE7631E4642F500298F09 /* QuickFocused-tvOSTests.xctest */,
-				856BE7651E4642F500298F09 /* QuickAfterSuite-tvOSTests.xctest */,
+				856BE7611E4642F500298F09 /* Quick - tvOSTests.xctest */,
+				856BE7631E4642F500298F09 /* QuickFocused - tvOSTests.xctest */,
+				856BE7651E4642F500298F09 /* QuickAfterSuite - tvOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -698,24 +701,24 @@
 			remoteRef = 856BE74E1E4642F500298F09 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		856BE7511E4642F500298F09 /* Quick-macOSTests.xctest */ = {
+		856BE7511E4642F500298F09 /* Quick - macOSTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "Quick-macOSTests.xctest";
+			path = "Quick - macOSTests.xctest";
 			remoteRef = 856BE7501E4642F500298F09 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		856BE7531E4642F500298F09 /* QuickFocused-macOSTests.xctest */ = {
+		856BE7531E4642F500298F09 /* QuickFocused - macOSTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "QuickFocused-macOSTests.xctest";
+			path = "QuickFocused - macOSTests.xctest";
 			remoteRef = 856BE7521E4642F500298F09 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		856BE7551E4642F500298F09 /* QuickAfterSuite-macOSTests.xctest */ = {
+		856BE7551E4642F500298F09 /* QuickAfterSuite - macOSTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "QuickAfterSuite-macOSTests.xctest";
+			path = "QuickAfterSuite - macOSTests.xctest";
 			remoteRef = 856BE7541E4642F500298F09 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -726,24 +729,24 @@
 			remoteRef = 856BE7561E4642F500298F09 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		856BE7591E4642F500298F09 /* Quick-iOSTests.xctest */ = {
+		856BE7591E4642F500298F09 /* Quick - iOSTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "Quick-iOSTests.xctest";
+			path = "Quick - iOSTests.xctest";
 			remoteRef = 856BE7581E4642F500298F09 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		856BE75B1E4642F500298F09 /* QuickFocused-iOSTests.xctest */ = {
+		856BE75B1E4642F500298F09 /* QuickFocused - iOSTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "QuickFocused-iOSTests.xctest";
+			path = "QuickFocused - iOSTests.xctest";
 			remoteRef = 856BE75A1E4642F500298F09 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		856BE75D1E4642F500298F09 /* QuickAfterSuite-iOSTests.xctest */ = {
+		856BE75D1E4642F500298F09 /* QuickAfterSuite - iOSTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "QuickAfterSuite-iOSTests.xctest";
+			path = "QuickAfterSuite - iOSTests.xctest";
 			remoteRef = 856BE75C1E4642F500298F09 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -754,24 +757,24 @@
 			remoteRef = 856BE75E1E4642F500298F09 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		856BE7611E4642F500298F09 /* Quick-tvOSTests.xctest */ = {
+		856BE7611E4642F500298F09 /* Quick - tvOSTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "Quick-tvOSTests.xctest";
+			path = "Quick - tvOSTests.xctest";
 			remoteRef = 856BE7601E4642F500298F09 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		856BE7631E4642F500298F09 /* QuickFocused-tvOSTests.xctest */ = {
+		856BE7631E4642F500298F09 /* QuickFocused - tvOSTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "QuickFocused-tvOSTests.xctest";
+			path = "QuickFocused - tvOSTests.xctest";
 			remoteRef = 856BE7621E4642F500298F09 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		856BE7651E4642F500298F09 /* QuickAfterSuite-tvOSTests.xctest */ = {
+		856BE7651E4642F500298F09 /* QuickAfterSuite - tvOSTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "QuickAfterSuite-tvOSTests.xctest";
+			path = "QuickAfterSuite - tvOSTests.xctest";
 			remoteRef = 856BE7641E4642F500298F09 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -863,13 +866,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				856BE9551E46CCDB00298F09 /* RecordArray.swift in Sources */,
+				85B60D551E50E8D20089D55D /* String.swift in Sources */,
 				856BE9401E467EDB00298F09 /* Serializer.swift in Sources */,
 				856BE9461E467F6300298F09 /* RecordSet.swift in Sources */,
 				856BE9511E46CB8500298F09 /* Aliases.swift in Sources */,
 				856BE9441E467F1C00298F09 /* Store.swift in Sources */,
 				856BE9421E467EE300298F09 /* WebClient.swift in Sources */,
 				856BE93E1E467EC700298F09 /* Adapter.swift in Sources */,
-				856BE93C1E467EA700298F09 /* Model.swift in Sources */,
+				856BE93C1E467EA700298F09 /* Record.swift in Sources */,
 				856BE9531E46CB8F00298F09 /* Errors.swift in Sources */,
 				856BE94F1E4697BE00298F09 /* Snapshot.swift in Sources */,
 			);

@@ -17,7 +17,7 @@ fileprivate struct LookupKey: Hashable {
     let cacheType: CacheType
     let cacheName: String
     
-    init<T: Model>(cacheType: CacheType, Type: T.Type) {
+    init<T: Record>(cacheType: CacheType, Type: T.Type) {
         self.cacheType = cacheType
         let name = String(describing: Type).lowercased()
         self.cacheName = "\(cacheType.rawValue):\(name)"
@@ -34,7 +34,7 @@ fileprivate extension LookupKey {
 fileprivate struct InstanceCache {
     private lazy var cache = [LookupKey: Cacheable]()
     
-    mutating func get<T: Model>(cacheType: CacheType, Type: T.Type) -> Cacheable {
+    mutating func get<T: Record>(cacheType: CacheType, Type: T.Type) -> Cacheable {
         let lookupKey = LookupKey(cacheType: cacheType, Type: Type)
         var instance = cache[lookupKey]
         if let instance = instance {
@@ -45,11 +45,11 @@ fileprivate struct InstanceCache {
         return instance!
     }
     
-    private func serializerInstance<T: Model>(for Type: T.Type) -> Cacheable {
+    private func serializerInstance<T: Record>(for Type: T.Type) -> Cacheable {
         return Type.serializerClass.init()
     }
     
-    private func adapterInstance<T: Model>(for Type: T.Type) -> Cacheable {
+    private func adapterInstance<T: Record>(for Type: T.Type) -> Cacheable {
         return Type.adapterClass.init()
     }
 }
@@ -64,7 +64,7 @@ fileprivate extension Dictionary {
 fileprivate final class RecordManager {
     private lazy var records = Dictionary<LookupKey, RecordSet>()
     
-    @discardableResult func load<T: Model>(_ record: T) -> T {
+    @discardableResult func load<T: Record>(_ record: T) -> T {
         let Type = type(of: record.self)
         let lookupKey = LookupKey(cacheType: .record, Type: Type)
         var recordSet = records.get(lookupKey)
@@ -73,22 +73,22 @@ fileprivate final class RecordManager {
         return record
     }
     
-    func get<T: Model>(_ Type: T.Type) -> [T] {
+    func get<T: Record>(_ Type: T.Type) -> [T] {
         let lookupKey = LookupKey(cacheType: .record, Type: Type)
         return records.get(lookupKey).elements as! [T]
     }
     
-    func get<T: Model>(_ Type: T.Type, id: ID) -> T? {
+    func get<T: Record>(_ Type: T.Type, id: ID) -> T? {
         let lookupKey = LookupKey(cacheType: .record, Type: Type)
         return records.get(lookupKey)[id] as? T
     }
     
-    func clear<T: Model>(_ Type: T.Type) {
+    func clear<T: Record>(_ Type: T.Type) {
         let lookupKey = LookupKey(cacheType: .record, Type: Type)
         records[lookupKey] = RecordSet()
     }
     
-    func clear<T: Model>(_ record: T) {
+    func clear<T: Record>(_ record: T) {
         let Type = type(of: record.self)
         let lookupKey = LookupKey(cacheType: .record, Type: Type)
         var recordSet = records.get(lookupKey)
@@ -105,17 +105,17 @@ public final class Store {
     // Disable initialization
     private init() {}
     
-    func find<T: Model>(all Type: T.Type, completion: @escaping (RecordArray<T>?, Error?) -> Void) {
+    func find<T: Record>(all Type: T.Type, completion: @escaping (RecordArray<T>?, Error?) -> Void) {
         let completionHandler = handler(for: Type, requestType: .findAll, completion: completion)
         adapter(for: Type).find(all: Type, completion: completionHandler)
     }
     
-    func find<T: Model>(record Type: T.Type, id: ID, completion: @escaping (T?, Error?) -> Void) {
+    func find<T: Record>(record Type: T.Type, id: ID, completion: @escaping (T?, Error?) -> Void) {
         let completionHandler = handler(for: Type, requestType: .findAll, completion: completion)
         adapter(for: Type).find(record: Type, id: id, completion: completionHandler)
     }
     
-    private func handler<T: Model>(for Type: T.Type, requestType: RequestType, completion: @escaping (RecordArray<T>?, Error?) -> Void) -> (Any?, Error?) -> Void {
+    private func handler<T: Record>(for Type: T.Type, requestType: RequestType, completion: @escaping (RecordArray<T>?, Error?) -> Void) -> (Any?, Error?) -> Void {
         return { response, error in
             guard error == nil else { return completion(nil, error) }
             do {
@@ -129,7 +129,7 @@ public final class Store {
         }
     }
     
-    private func handler<T: Model>(for Type: T.Type, requestType: RequestType, completion: @escaping (T?, Error?) -> Void) -> (Any?, Error?) -> Void {
+    private func handler<T: Record>(for Type: T.Type, requestType: RequestType, completion: @escaping (T?, Error?) -> Void) -> (Any?, Error?) -> Void {
         return { (response, error) in
             guard error == nil else { return completion(nil, error) }
             do {
@@ -143,7 +143,7 @@ public final class Store {
         }
     }
     
-    @discardableResult func push<T: Model>(payload: [JSON], for Type: T.Type) throws -> RecordArray<T> {
+    @discardableResult func push<T: Record>(payload: [JSON], for Type: T.Type) throws -> RecordArray<T> {
         return RecordArray(try payload.map { try push(payload: $0, for: Type) })
     }
     
@@ -160,7 +160,7 @@ public final class Store {
      
         ```
     */
-    @discardableResult func push<T: Model>(payload: JSON, for Type: T.Type) throws -> T {
+    @discardableResult func push<T: Record>(payload: JSON, for Type: T.Type) throws -> T {
         do {
             let record = try serializer(for: Type).normalize(Type: Type, hash: payload)
             return push(record: record)
@@ -172,40 +172,40 @@ public final class Store {
     /// Push a records into the store.
     /// - Parameter record: The record to push ito the store.
     /// - Returns: The pushed records.
-    @discardableResult func push<T: Model>(record: T) -> T {
+    @discardableResult func push<T: Record>(record: T) -> T {
         return recordManager.load(record)
     }
     
     /// Push some records into the store.
     /// - Parameter records: The records to push ito the store.
     /// - Returns: A `RecordArray` of the pushed records.
-    @discardableResult func push<S: Sequence & Collection, T: Model>(records: S) -> RecordArray<T> where S.Iterator.Element == T {
+    @discardableResult func push<S: Sequence & Collection, T: Record>(records: S) -> RecordArray<T> where S.Iterator.Element == T {
         return RecordArray(records.map { self.push(record: $0) })
     }
     
     /// This method returns an instance of serializer for the specified type.
     /// - Parameter for: The record type class.
     /// - Returns: An instance of serializer for the specified type.
-    func serializer<T: Model>(for Type: T.Type) -> SerializerType {
+    func serializer<T: Record>(for Type: T.Type) -> SerializerType {
         return instanceCache.get(cacheType: .serializer, Type: Type) as! SerializerType
     }
     
     /// This method returns an instance of adapter for the specified type.
     /// - Parameter for: The record type class.
     /// - Returns: An instance of adapter for the specified type.
-    func adapter<T: Model>(for Type: T.Type) -> AdapterType {
+    func adapter<T: Record>(for Type: T.Type) -> AdapterType {
         return instanceCache.get(cacheType: .adapter, Type: Type) as! AdapterType
     }
     
     /// This method will remove the records from the store.
     /// - Parameter record: The record to remove.
-    func unload<T: Model>(record: T) {
+    func unload<T: Record>(record: T) {
         recordManager.clear(record)
     }
     
     /// This method will remove all records of the given type from the store.
     /// - Parameter all: The record type class.
-    func unload<T: Model>(all Type: T.Type) {
+    func unload<T: Record>(all Type: T.Type) {
         recordManager.clear(Type)
     }
     
@@ -215,7 +215,7 @@ public final class Store {
     /// the same records.
     /// - Parameter all: The record type class.
     /// - Returns: A `RecordArray` of the specified type.
-    func peek<T: Model>(all Type: T.Type) -> RecordArray<T> {
+    func peek<T: Record>(all Type: T.Type) -> RecordArray<T> {
         return RecordArray(recordManager.get(Type))
     }
     
@@ -227,7 +227,7 @@ public final class Store {
     ///     - record: The record type class.
     ///     - id: The id of the record.
     /// - Returns: A Record if it's available in the store, otherwise nil.
-    func peek<T: Model>(record Type: T.Type, id: ID) -> T? {
+    func peek<T: Record>(record Type: T.Type, id: ID) -> T? {
         return recordManager.get(Type, id: id)
     }
 }
