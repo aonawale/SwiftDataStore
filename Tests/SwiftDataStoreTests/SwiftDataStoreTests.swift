@@ -21,9 +21,10 @@ struct User: Record {
     let name: String
     let email: String?
     
-    init(id: ID, hash: JSON) {
+    init?(id: ID, hash: JSON) {
         self.id = id
-        name = hash["name"] as! String
+        guard let name = hash["name"] as? String else { return nil }
+        self.name = name
         email = hash["email"] as? String
     }
     
@@ -95,7 +96,7 @@ class SwiftDataStoreTests: QuickSpec {
                 -URLSession:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend: 
                 delegate method will never be called when you stub the request using OHHTTPStubs
             */
-            // Because of this limitation, we'll assume all POST request is a success
+            // Because of this limitation, we'll assume all POST request is successful
             stub(condition: isHost("jsonplaceholder.typicode.com") && isMethodPOST()) { req in
                 let user = ["id":"1", "email": "foo@bar.com", "name": "foo"]
                 let data = try! JSONSerialization.data(withJSONObject: user, options: [])

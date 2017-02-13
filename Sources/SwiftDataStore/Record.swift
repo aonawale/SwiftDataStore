@@ -53,7 +53,7 @@ public protocol Record: Serializable, Normalizable {
 /// Default Record properties
 public extension Record {
     static var adapterClass: AdapterType.Type {
-        return JSONAdapter.self
+        return Adapter.self
     }
     
     static var serializerClass: SerializerType.Type {

@@ -28,9 +28,9 @@ public protocol AdapterType: Cacheable {
     var headers: [String: String] { get }
     var client: NetworkType { get }
     func path<T: Record>(for Type: T.Type) -> String
-    func find<T: Record>(all type: T.Type, completion: @escaping NetworkCompletion)
-    func find<T: Record>(record type: T.Type, id: ID, completion: @escaping NetworkCompletion)
-    func create<T: Record>(record: T, completion: @escaping NetworkCompletion)
+    func find<T: Record>(all type: T.Type, completion: @escaping NetworkCompletion) -> URLSessionDataTask
+    func find<T: Record>(record type: T.Type, id: ID, completion: @escaping NetworkCompletion) -> URLSessionDataTask
+    func create<T: Record>(record: T, completion: @escaping NetworkCompletion) -> URLSessionDataTask
 }
 
 public extension AdapterType {
@@ -90,17 +90,17 @@ public extension AdapterType {
         return url(for: type, requestType: .create(record: record))
     }
     
-    func find<T: Record>(record type: T.Type, id: ID, completion: @escaping NetworkCompletion) {
+    @discardableResult func find<T: Record>(record type: T.Type, id: ID, completion: @escaping NetworkCompletion) -> URLSessionDataTask {
         let _request = request(for: urlForFind(record: type, id: id), method: .get)
         return client.load(request: _request, completion: completion)
     }
     
-    func find<T: Record>(all type: T.Type, completion: @escaping NetworkCompletion) {
+    @discardableResult func find<T: Record>(all type: T.Type, completion: @escaping NetworkCompletion) -> URLSessionDataTask {
         let _request = request(for: urlForFind(all: type), method: .get)
         return client.load(request: _request, completion: completion)
     }
     
-    func create<T: Record>(record: T, completion: @escaping NetworkCompletion) {
+    @discardableResult func create<T: Record>(record: T, completion: @escaping NetworkCompletion) -> URLSessionDataTask {
         let type = type(of: record)
         let hash = Store.sharedStore.serializer(for: type).serialize(record: record, includeId: false)
         let _request = request(for: urlForCreate(record: record, type: type), method: .post(hash))
@@ -108,7 +108,7 @@ public extension AdapterType {
     }
 }
 
-public struct JSONAdapter: AdapterType {
+public struct Adapter: AdapterType {
     
     public init() {}
     

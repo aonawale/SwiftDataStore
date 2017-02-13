@@ -36,11 +36,11 @@ extension HTTPMethod {
 public protocol NetworkType {
     var baseURL: String { get }
     init(baseUrl: String)
-    func load(request: URLRequest, completion: @escaping NetworkCompletion)
+    func load(request: URLRequest, completion: @escaping NetworkCompletion) -> URLSessionDataTask
 }
 
 public extension NetworkType {
-    func load(request: URLRequest, completion: @escaping NetworkCompletion) {
+    @discardableResult func load(request: URLRequest, completion: @escaping NetworkCompletion) -> URLSessionDataTask {
         // Create Reachability instance
         let reachability = Reachability()!
         
@@ -49,7 +49,7 @@ public extension NetworkType {
             completion(nil, NetworkError.noInternetConnection)
         }
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             // make sure there is no error
             guard error == nil else { return completion(nil, error) }
             
@@ -70,7 +70,9 @@ public extension NetworkType {
                 let errorMessage = HTTPURLResponse.localizedString(forStatusCode: response.statusCode)
                 completion(nil, NetworkError.other(errorMessage))
             }
-        }.resume()
+        }
+        task.resume()
+        return task
     }
 }
 
