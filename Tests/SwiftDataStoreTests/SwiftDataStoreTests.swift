@@ -36,17 +36,20 @@ struct User: Record {
     }
     
     init(id: Int? = nil, name: String) {
-        if let id = id {
-            self.id = ID(id)
-        } else {
-            self.id = nil
-        }
         self.name = name
         self.email = nil
+        self.id = id == nil ? nil : ID(id!)
     }
     
     static var adapterType: Adapter.Type {
         return AuthorAdapter.self
+    }
+    
+    func toJSON() -> JSON {
+        return [
+            "name": name,
+            "email": email
+        ]
     }
 }
 
@@ -69,5 +72,12 @@ struct Post: Record {
     
     static var adapterClass: Adapter.Type {
         return AuthorAdapter.self
+    }
+    
+    func toJSON() -> JSON {
+        return [
+            "title": title,
+            "body": body
+        ]
     }
 }

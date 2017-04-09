@@ -9,7 +9,8 @@
 public typealias Host = String
 public typealias Namespace = String
 public typealias PrimaryKey = String
-public typealias JSON = [String: Any]
+public typealias JSON = [String: Any?]
+public typealias Hash = [String: Any?]
 public typealias Query = [String: String]
 public typealias Headers = [String: String]
 public typealias AnyHashableJSON = [AnyHashable: Any]

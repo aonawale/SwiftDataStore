@@ -29,7 +29,6 @@
 		856BE9531E46CB8F00298F09 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE9521E46CB8F00298F09 /* Errors.swift */; };
 		856BE9551E46CCDB00298F09 /* RecordArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE9541E46CCDB00298F09 /* RecordArray.swift */; };
 		859C56A31E9AC75C00A91191 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 859C56A21E9AC75C00A91191 /* Mocks.swift */; };
-		85B60D551E50E8D20089D55D /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B60D541E50E8D20089D55D /* String.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -308,7 +307,6 @@
 		856BE9521E46CB8F00298F09 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Errors.swift; path = Sources/SwiftDataStore/Errors.swift; sourceTree = SOURCE_ROOT; };
 		856BE9541E46CCDB00298F09 /* RecordArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecordArray.swift; path = Sources/SwiftDataStore/RecordArray.swift; sourceTree = SOURCE_ROOT; };
 		859C56A21E9AC75C00A91191 /* Mocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Mocks.swift; path = Sources/SwiftDataStore/Mocks.swift; sourceTree = SOURCE_ROOT; };
-		85B60D541E50E8D20089D55D /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = String.swift; path = Sources/SwiftDataStore/String.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -371,7 +369,6 @@
 				856BE9501E46CB8500298F09 /* Aliases.swift */,
 				856BE9521E46CB8F00298F09 /* Errors.swift */,
 				856BE9541E46CCDB00298F09 /* RecordArray.swift */,
-				85B60D541E50E8D20089D55D /* String.swift */,
 			);
 			path = SwiftDataStore;
 			sourceTree = "<group>";
@@ -869,7 +866,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				856BE9551E46CCDB00298F09 /* RecordArray.swift in Sources */,
-				85B60D551E50E8D20089D55D /* String.swift in Sources */,
 				856BE9401E467EDB00298F09 /* Serializer.swift in Sources */,
 				856BE9461E467F6300298F09 /* RecordSet.swift in Sources */,
 				856BE9511E46CB8500298F09 /* Aliases.swift in Sources */,

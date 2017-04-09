@@ -18,6 +18,7 @@ public enum AdapterError: Int, Error {
     case abort
     case badResponse
     case unknown
+    case url
     
     init(_ code: Int) {
         if let error = AdapterError(rawValue: code) {
