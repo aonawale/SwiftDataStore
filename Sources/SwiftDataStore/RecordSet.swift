@@ -29,7 +29,8 @@ public struct RecordSet {
     
     /// Returns `true` if the Set contains `element`.
     func contains(_ element: Element) -> Bool {
-        return contents[element.id] != nil
+        guard let id = element.id else { return false }
+        return contents[id] != nil
     }
     
     subscript(id: ID) -> Element? {
@@ -38,17 +39,26 @@ public struct RecordSet {
     
     /// Add `newElements` to the Set.
     mutating func insert(_ elements: Element...) {
-        elements.forEach { contents[$0.id] = $0 }
+        elements.forEach {
+            if let id = $0.id {
+                contents[id] = $0
+            }
+        }
     }
     
     /// Overloaded version that accepts an array instead of varadic parameters
     mutating func insert(_ elements: [Element]) {
-        elements.forEach { contents[$0.id] = $0 }
+        elements.forEach {
+            if let id = $0.id {
+                contents[id] = $0
+            }
+        }
     }
     
     /// Remove `element` from the Set.
     @discardableResult mutating func remove(_ element: Element) -> Element? {
-        return contents.removeValue(forKey: element.id)
+        guard let id = element.id else { return nil }
+        return contents.removeValue(forKey: id)
     }
 }
 
@@ -64,7 +74,11 @@ extension RecordSet : Sequence {
 // MARK: RecordSet Easier initialization
 extension RecordSet {
     init<S: Sequence>(_ sequence: S) where S.Iterator.Element == Element {
-        sequence.forEach { contents[$0.id] = $0 }
+        sequence.forEach {
+            if let id = $0.id {
+                contents[id] = $0
+            }
+        }
     }
 }
 
@@ -73,13 +87,6 @@ extension RecordSet : ExpressibleByArrayLiteral {
     public init(arrayLiteral elements: Element...) {
         self.init(elements)
     }
-}
-
-// Hoping to use this to implement function.apply
-// we used to have this in other programming languages
-@discardableResult func apply<T, U>(fn: (T...) -> U, args: [T]) -> U {
-    typealias FunctionType = ([T]) -> U
-    return unsafeBitCast(fn, to: FunctionType.self)(args)
 }
 
 extension RecordSet {
