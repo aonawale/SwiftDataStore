@@ -6,38 +6,37 @@
 //  Copyright © 2017 Ahmed Onawale. All rights reserved.
 //
 
-struct ModelError: Error {
+public enum AdapterError: Int, Error {
+    case unauthorized = 401
+    case forbidden = 403
+    case notFound = 404
+    case timeout = 408
+    case conflict = 409
+    case invalid = 422
+    case server = 500
     
-}
-
-public enum NetworkError: Error {
-    case noInternetConnection
+    case abort
     case badResponse
-    case other(String)
-}
-
-extension NetworkError: LocalizedError {
-    public var errorDescription: String? {
-        switch self {
-        case .noInternetConnection:
-            return "No Internet connection"
-        case .badResponse:
-            return "Bad response"
-        case .other(let message):
-            return message
+    case unknown
+    
+    init(_ code: Int) {
+        if let error = AdapterError(rawValue: code) {
+            self = error
+        } else {
+            self = .unknown
         }
     }
 }
 
 public enum SerializerError: Error {
-    case requireID
+    case requiresID
     case invalidJSON
 }
 
 extension SerializerError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .requireID:
+        case .requiresID:
             return "Requires id"
         case .invalidJSON:
             return "Invalid JSON"
