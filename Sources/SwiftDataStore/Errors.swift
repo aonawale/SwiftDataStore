@@ -43,3 +43,16 @@ extension SerializerError: LocalizedError {
         }
     }
 }
+
+public enum StoreError: Error {
+    case invalidRecord(String)
+}
+
+extension StoreError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .invalidRecord(let message):
+            return message
+        }
+    }
+}

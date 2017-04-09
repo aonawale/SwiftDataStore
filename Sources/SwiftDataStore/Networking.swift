@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Reachability
 
 public enum Scheme: String {
     case http
