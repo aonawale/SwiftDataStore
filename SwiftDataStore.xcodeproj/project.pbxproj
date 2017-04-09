@@ -17,7 +17,7 @@
 		856BE93C1E467EA700298F09 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE93B1E467EA700298F09 /* Record.swift */; };
 		856BE93E1E467EC700298F09 /* Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE93D1E467EC700298F09 /* Adapter.swift */; };
 		856BE9401E467EDB00298F09 /* Serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE93F1E467EDB00298F09 /* Serializer.swift */; };
-		856BE9421E467EE300298F09 /* WebClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE9411E467EE300298F09 /* WebClient.swift */; };
+		856BE9421E467EE300298F09 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE9411E467EE300298F09 /* Networking.swift */; };
 		856BE9441E467F1C00298F09 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE9431E467F1C00298F09 /* Store.swift */; };
 		856BE9461E467F6300298F09 /* RecordSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE9451E467F6300298F09 /* RecordSet.swift */; };
 		856BE9471E4681F700298F09 /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856BE7B21E4648B000298F09 /* StoreTests.swift */; };
@@ -298,7 +298,7 @@
 		856BE93B1E467EA700298F09 /* Record.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Record.swift; path = Sources/SwiftDataStore/Record.swift; sourceTree = SOURCE_ROOT; };
 		856BE93D1E467EC700298F09 /* Adapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Adapter.swift; path = Sources/SwiftDataStore/Adapter.swift; sourceTree = SOURCE_ROOT; };
 		856BE93F1E467EDB00298F09 /* Serializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Serializer.swift; path = Sources/SwiftDataStore/Serializer.swift; sourceTree = SOURCE_ROOT; };
-		856BE9411E467EE300298F09 /* WebClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebClient.swift; path = Sources/SwiftDataStore/WebClient.swift; sourceTree = SOURCE_ROOT; };
+		856BE9411E467EE300298F09 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Networking.swift; path = Sources/SwiftDataStore/Networking.swift; sourceTree = SOURCE_ROOT; };
 		856BE9431E467F1C00298F09 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Store.swift; path = Sources/SwiftDataStore/Store.swift; sourceTree = SOURCE_ROOT; };
 		856BE9451E467F6300298F09 /* RecordSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecordSet.swift; path = Sources/SwiftDataStore/RecordSet.swift; sourceTree = SOURCE_ROOT; };
 		856BE94A1E46847400298F09 /* SwiftDataStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SwiftDataStoreTests.swift; path = Tests/SwiftDataStoreTests/SwiftDataStoreTests.swift; sourceTree = "<group>"; };
@@ -362,7 +362,7 @@
 				856BE93B1E467EA700298F09 /* Record.swift */,
 				856BE93D1E467EC700298F09 /* Adapter.swift */,
 				856BE93F1E467EDB00298F09 /* Serializer.swift */,
-				856BE9411E467EE300298F09 /* WebClient.swift */,
+				856BE9411E467EE300298F09 /* Networking.swift */,
 				856BE9431E467F1C00298F09 /* Store.swift */,
 				856BE9451E467F6300298F09 /* RecordSet.swift */,
 				856BE94E1E4697BE00298F09 /* Snapshot.swift */,
@@ -871,7 +871,7 @@
 				856BE9461E467F6300298F09 /* RecordSet.swift in Sources */,
 				856BE9511E46CB8500298F09 /* Aliases.swift in Sources */,
 				856BE9441E467F1C00298F09 /* Store.swift in Sources */,
-				856BE9421E467EE300298F09 /* WebClient.swift in Sources */,
+				856BE9421E467EE300298F09 /* Networking.swift in Sources */,
 				856BE93E1E467EC700298F09 /* Adapter.swift in Sources */,
 				856BE93C1E467EA700298F09 /* Record.swift in Sources */,
 				856BE9531E46CB8F00298F09 /* Errors.swift in Sources */,
