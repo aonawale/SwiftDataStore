@@ -10,34 +10,38 @@ import Quick
 import Nimble
 @testable import SwiftDataStore
 
-class SerializerTests: SwiftDataStoreTests {
+class SerializerTests: QuickSpec {
+    let store = Store.shared
+    
     override func spec() {
         describe("JSON Serializer - Resource serialization and normalization") {
             var serializer: JSONSerializer!
             
-            context("when passed a valid JSON object") {
+            context("when passed a valid Record instance") {
                 beforeEach {
                     serializer = JSONSerializer()
                 }
                 
                 it("serializes single record") {
-                    let serialzed = serializer.serialize(record: User(id: 1, name: "Foo"))
+                    let snapshot = Snapshot(record: User(id: 1, name: "Foo"))
+                    let serialzed = serializer.serialize(record: snapshot, options: [])
                     expect(serialzed).toNot(beNil())
                 }
                 
                 it("serializes record array") {
-                    let serialzed = serializer.serialize(records: [User(id: 1, name: "Foo"), User(id: 2, name: "Bar")])
+                    let snapshots = [User(id: 1, name: "Foo"), User(id: 2, name: "Bar")].map { Snapshot(record: $0) }
+                    let serialzed = serializer.serialize(records: snapshots, options: [])
                     expect(serialzed).to(haveCount(2))
                 }
                 
                 it("normalizes single record") {
-                    let serialzed = try? serializer.normalize(type: User.self, hash: ["id":"1", "email": "foo@bar.com", "name": "foo"])
-                    expect(serialzed).notTo(beNil())
+                    let record = try? serializer.normalize(type: User.self, hash: ["id":"1", "email": "foo@bar.com", "name": "foo"])
+                    expect(record).notTo(beNil())
                 }
                 
                 it("normalizes record array") {
-                    let serialzed = try? serializer.normalize(type: User.self, hash: [["id":"2", "name": "foo"], ["id":"3", "name": "Boo"]])
-                    expect(serialzed).to(haveCount(2))
+                    let record = try? serializer.normalize(type: User.self, hash: [["id":"2", "name": "foo"], ["id":"3", "name": "Boo"]])
+                    expect(record).to(haveCount(2))
                 }
             }
             
@@ -46,17 +50,17 @@ class SerializerTests: SwiftDataStoreTests {
                     serializer = JSONSerializer()
                 }
                 
-                it("throws required id error") {
+                it("throws requires id error") {
                     let json = ["email": "foo@bar.com", "name": "foo"]
                     expect{ try serializer.normalize(type: User.self, hash: json) }.to(throwError { error in
-                        expect(error).to(matchError(SerializerError.requireID))
+                        expect(error).to(matchError(SerializerError.requiresID))
                     })
                 }
                 
-                it("throws invalud json error") {
+                it("throws missing key error") {
                     let json = ["id": "1", "email": "foo@bar.com"]
                     expect{ try serializer.normalize(type: User.self, hash: json) }.to(throwError { error in
-                        expect(error).to(matchError(SerializerError.invalidJSON))
+                        expect(error).to(matchError(ModelError.invalid(key: "name", expected: "")))
                     })
                 }
             }
