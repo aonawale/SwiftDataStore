@@ -13,7 +13,7 @@ public struct SerializationOptions: OptionSet {
     public static let all: SerializationOptions = [.includeId]
     
     public init(rawValue: Int) {
-        self = SerializationOptions(rawValue: rawValue)
+        self.rawValue = rawValue
     }
 }
 
