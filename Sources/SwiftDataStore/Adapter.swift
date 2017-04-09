@@ -110,10 +110,10 @@ public extension Adapter {
         
         switch request {
         case .create:
-            serializer.serialize(into: &hash, snapshot: snapshot, options: [.includeId])
+            serializer.serialize(into: &hash, snapshot: snapshot, options: [])
             return try serializer.serialize(json: hash)
         case .update(_):
-            serializer.serialize(into: &hash, snapshot: snapshot, options: [])
+            serializer.serialize(into: &hash, snapshot: snapshot, options: [.includeId])
             return try serializer.serialize(json: hash)
         default:
             return nil
@@ -132,23 +132,20 @@ public extension Adapter {
     }
     
     private func url<T: Record>(for request: Request, type: T.Type) throws -> URL {
-        var path = self.path(for: type)
+        var paths = [namespace, path(for: type)]
         var components = URLComponents()
         components.scheme = scheme.description
         components.host = host
-        path = "/\(path.remove(leading: "/", trailing: "/").trim())"
         switch request {
-        case .find(record: let id):
-            path = "\(path)/\(id)"
         case .query(let query), .queryRecord(let query):
             components.queryItems = query.map { URLQueryItem(name: $0.key, value: $0.value) }
-        case .update(let id), .delete(let id):
-            path = "\(path)/\(id)"
+        case .update(let id), .delete(let id), .find(let id):
+            paths.append(id.value)
         default:
             break
         }
-        components.path = path
-        guard let url = components.url else { throw AdapterError.invalid }
+        components.path = paths.joined(separator: "/")
+        guard let url = components.url else { throw AdapterError.url }
         return url
     }
     
