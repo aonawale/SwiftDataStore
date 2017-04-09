@@ -6,5 +6,12 @@
 //  Copyright © 2017 Ahmed Onawale. All rights reserved.
 //
 
+public typealias Host = String
+public typealias Namespace = String
+public typealias PrimaryKey = String
 public typealias JSON = [String: Any]
-public typealias NetworkCompletion = (Any?, Error?) -> Void
+public typealias Query = [String: String]
+public typealias Headers = [String: String]
+public typealias AnyHashableJSON = [AnyHashable: Any]
+public typealias DataCompletion = (Data?, Error?) -> Void
+public typealias DataTaskCompletion = (Data?, URLResponse?, Error?) -> Void
