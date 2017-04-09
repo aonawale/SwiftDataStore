@@ -26,7 +26,7 @@ public protocol Serializer: Cacheable {
     func extract(id hash: JSON) throws -> ID
     func extract(meta hash: JSON) -> JSON?
     
-    func serialize(json: JSON) throws -> Data
+    func serialize(json: Any) throws -> Data
     
     func serialize(record: Snapshot, options: SerializationOptions) -> JSON
     func serialize(records: [Snapshot], options: SerializationOptions) -> [JSON]
@@ -36,14 +36,6 @@ public protocol Serializer: Cacheable {
     
     func normalize<T: Record>(type: T.Type, hash: JSON) throws -> T
     func normalize<T: Record>(type: T.Type, hash: [JSON]) throws -> [T]
-    
-    func normalize<T: Record>(single data: Data, for type: T.Type, request: Request) throws -> T
-    func normalize<T: Record>(create data: Data, for type: T.Type, request: Request) throws -> T
-    func normalize<T: Record>(findRecord data: Data, for type: T.Type, request: Request) throws -> T
-    
-    func normalize<T: Record>(many data: Data, for type: T.Type) throws -> RecordArray<T>
-    func normalize<T: Record>(query data: Data, for type: T.Type) throws -> RecordArray<T>
-    func normalize<T: Record>(findAll data: Data, for type: T.Type) throws -> RecordArray<T>
     
     func normalize<T: Record>(response data: Data, for type: T.Type, request: Request) throws -> T
     func normalize<T: Record>(response data: Data, for type: T.Type, request: Request) throws -> RecordArray<T>
@@ -94,7 +86,7 @@ public extension Serializer {
         return hash
     }
     
-    func serialize(json: JSON) throws -> Data {
+    func serialize(json: Any) throws -> Data {
         return try JSONSerialization.data(withJSONObject: json, options: writingOptions)
     }
     
@@ -154,7 +146,7 @@ public extension Serializer {
         return try normalize(type: type, hash: json)
     }
     
-    func normalize<T: Record>(findRecord data: Data, for type: T.Type, request: Request) throws -> T {
+    func normalize<T: Record>(find data: Data, for type: T.Type, request: Request) throws -> T {
         return try normalize(single: data, for: type, request: request)
     }
     
@@ -165,7 +157,7 @@ public extension Serializer {
     func normalize<T: Record>(response data: Data, for type: T.Type, request: Request) throws -> T {
         switch request {
         case .find:
-            return try normalize(findRecord: data, for: type, request: request)
+            return try normalize(find: data, for: type, request: request)
         case .create:
             return try normalize(create: data, for: type, request: request)
         default:
