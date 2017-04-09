@@ -7,5 +7,19 @@
 //
 
 public struct Snapshot {
+    let record: Record?
+    let adapterOptions: AnyHashableJSON
     
+    var id: ID? {
+        return record?.id
+    }
+    
+    func json() -> JSON? {
+        return record?.toJSON()
+    }
+    
+    init(record: Record? = nil, adapterOptions: AnyHashableJSON = AnyHashableJSON()) {
+        self.record = record
+        self.adapterOptions = adapterOptions
+    }
 }
