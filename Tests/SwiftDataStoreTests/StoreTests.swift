@@ -20,7 +20,9 @@ public func beUser<T: Record>(_ expectedValue: T?) -> MatcherFunc<T> {
     }
 }
 
-class StoreTests: SwiftDataStoreTests {
+class StoreTests: QuickSpec {
+    let store = Store.shared
+    
     override func spec() {
         describe("find resource") {
             var user: User?
@@ -41,12 +43,14 @@ class StoreTests: SwiftDataStoreTests {
             
             context("when the request is successful") {
                 it("finds all users") {
+                    Mock.User.index()
                     self.store.find(all: User.self) { users = $0; error = $1 }
                     expect(error).toEventually(beNil())
                     expect(users).toEventually(haveCount(3))
                 }
                 
                 it("finds one user with id") {
+                    Mock.User.one(id: "2")
                     self.store.find(record: User.self, id: ID(2)) { user = $0; error = $1 }
                     expect(error).toEventually(beNil())
                     expect(user).toEventuallyNot(beNil())
@@ -56,6 +60,7 @@ class StoreTests: SwiftDataStoreTests {
             
             context("when the request fails") {
                 it("returns AdapterError.notFound when message resource is not found") {
+                    Mock.User.notFound()
                     self.store.find(record: User.self, id: ID(9)) { user = $0; error = $1 }
                     expect(error).toEventuallyNot(beNil())
                     expect(user).toEventually(beNil())
@@ -67,6 +72,7 @@ class StoreTests: SwiftDataStoreTests {
         describe("Peek records") {
             context("when the record is loaded in the store") {
                 beforeEach {
+                    Mock.User.index()
                     // preload users into the store
                     waitUntil() { done in
                         self.store.find(all: User.self) { _ in done() }
