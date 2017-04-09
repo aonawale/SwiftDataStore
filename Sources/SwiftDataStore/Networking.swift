@@ -33,6 +33,10 @@ extension HTTPMethod {
     }
 }
 
+public protocol WebClientProtocol {
+    func load(request: URLRequest, completion: @escaping NetworkCompletion) -> URLSessionDataTask
+}
+
 public protocol NetworkType {
     var baseURL: String { get }
     init(baseUrl: String)
@@ -85,12 +89,12 @@ public struct WebClient: NetworkType {
 }
 
 public extension URL {
-    init(scheme: String = "https", host: String, path: String = "/", requestType: RequestType) {
+    init(scheme: Scheme = .https, host: String, path: String = "/", request: Request) {
         var components = URLComponents()
-        components.scheme = scheme
+        components.scheme = scheme.description
         components.host = host
         var _path = "/\(path.remove(leading: "/", trailing: "/").trim())"
-        switch requestType {
+        switch request {
         case .find(record: let id):
             _path = "\(_path)/\(id.value)"
         case .query(let query), .queryRecord(let query):
