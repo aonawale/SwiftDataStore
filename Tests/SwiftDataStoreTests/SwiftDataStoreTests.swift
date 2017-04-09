@@ -10,20 +10,30 @@ import Quick
 import OHHTTPStubs
 @testable import SwiftDataStore
 
-struct AuthorAdapter: AdapterType {
+struct AuthorAdapter: Adapter {
     var host: String {
         return "jsonplaceholder.typicode.com"
     }
+    
+    var client: NetworkProtocol = Ajax()
+    
+}
+
+enum ModelError: Error {
+    case invalid(key: String, expected: String)
+    case missing(key: String)
 }
 
 struct User: Record {
-    let id: ID
+    let id: ID?
     let name: String
     let email: String?
     
-    init?(id: ID, hash: JSON) {
+    init(id: ID, hash: JSON) throws {
         self.id = id
-        guard let name = hash["name"] as? String else { return nil }
+        guard let name = hash["name"] as? String else {
+            throw ModelError.invalid(key: "name", expected: "\(String.self)")
+        }
         self.name = name
         email = hash["email"] as? String
     }
@@ -34,13 +44,13 @@ struct User: Record {
         self.email = nil
     }
     
-    static var adapterClass: AdapterType.Type {
+    static var adapterType: Adapter.Type {
         return AuthorAdapter.self
     }
 }
 
 struct Post: Record {
-    let id: ID
+    let id: ID?
     let title: String
     let body: String?
     
@@ -56,14 +66,14 @@ struct Post: Record {
         self.body = nil
     }
     
-    static var adapterClass: AdapterType.Type {
+    static var adapterClass: Adapter.Type {
         return AuthorAdapter.self
     }
 }
 
 class SwiftDataStoreTests: QuickSpec {
     
-    let store = Store.sharedStore
+    let store = Store.shared
     
     override func spec() {
         beforeSuite {
