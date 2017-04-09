@@ -46,11 +46,11 @@ fileprivate final class InstanceCache {
     }
     
     private func serializerInstance<T: Record>(for type: T.Type) -> Cacheable {
-        return type.serializerClass.init()
+        return type.serializerType.init()
     }
     
     private func adapterInstance<T: Record>(for type: T.Type) -> Cacheable {
-        return type.adapterClass.init()
+        return type.adapterType.init()
     }
 }
 
@@ -60,12 +60,11 @@ fileprivate extension Dictionary {
         return recordSet
     }
 }
-
 fileprivate final class RecordManager {
     private lazy var records = Dictionary<LookupKey, RecordSet>()
     
     @discardableResult func load<T: Record>(_ record: T) -> T {
-        let type = type(of: record.self)
+        let type = type(of: record)
         let lookupKey = LookupKey(cacheType: .record, type: type)
         var recordSet = records.get(lookupKey)
         recordSet.insert(record)
@@ -75,7 +74,7 @@ fileprivate final class RecordManager {
     
     func get<T: Record>(_ type: T.Type) -> [T] {
         let lookupKey = LookupKey(cacheType: .record, type: type)
-        return records.get(lookupKey).elements as! [T]
+        return records.get(lookupKey).elements as? [T] ?? []
     }
     
     func get<T: Record>(_ type: T.Type, id: ID) -> T? {
@@ -98,45 +97,55 @@ fileprivate final class RecordManager {
 }
 
 public final class Store {
-    public static let sharedStore = Store()
+    public static let shared = Store()
     private let recordManager = RecordManager()
     private let instanceCache = InstanceCache()
     
     // Disable initialization
     private init() {}
     
-    @discardableResult func find<T: Record>(all type: T.Type, completion: @escaping (RecordArray<T>?, Error?) -> Void) -> URLSessionDataTask {
-        let completionHandler = handler(for: type, requestType: .findAll, completion: completion)
-        return adapter(for: type).find(all: type, completion: completionHandler)
+    @discardableResult func create<T: Record>(record: T, adapterOptions: AnyHashableJSON = [:],
+                                   completion: @escaping (T?, Error?) -> Void) -> URLSessionDataTask? {
+        let type = type(of: record)
+        let snapshot = Snapshot(record: record, adapterOptions: adapterOptions)
+        let _completion = handler(for: type, request: .create, completion: completion)
+        return adapter(for: type).create(type: type, store: self, snapshot: snapshot, completion: _completion)
     }
     
-    @discardableResult func find<T: Record>(record type: T.Type, id: ID, completion: @escaping (T?, Error?) -> Void) -> URLSessionDataTask {
-        let completionHandler = handler(for: type, requestType: .findAll, completion: completion)
-        return adapter(for: type).find(record: type, id: id, completion: completionHandler)
+    @discardableResult func find<T: Record>(all type: T.Type, adapterOptions: AnyHashableJSON = [:],
+                                 completion: @escaping (RecordArray<T>?, Error?) -> Void) -> URLSessionDataTask? {
+        let snapshot = Snapshot(adapterOptions: adapterOptions)
+        let _completion = handler(for: type, request: .findAll, completion: completion)
+        return adapter(for: type).find(all: type, store: self, snapshot: snapshot, completion: _completion)
+    }
+
+    @discardableResult func find<T: Record>(record type: T.Type, id: ID, adapterOptions: AnyHashableJSON = [:],
+                                 completion: @escaping (T?, Error?) -> Void) -> URLSessionDataTask? {
+        let snapshot = Snapshot(adapterOptions: adapterOptions)
+        let _completion = handler(for: type, request: .find(id), completion: completion)
+        return adapter(for: type).find(type: type, id: id, store: self, snapshot: snapshot, completion: _completion)
     }
     
-    private func handler<T: Record>(for type: T.Type, requestType: RequestType, completion: @escaping (RecordArray<T>?, Error?) -> Void) -> (Any?, Error?) -> Void {
-        return { response, error in
-            guard error == nil else { return completion(nil, error) }
+    private func handler<T: Record>(for type: T.Type, request: Request, completion: @escaping (RecordArray<T>?, Error?) -> Void) -> DataCompletion {
+        return { data, error in
+            guard let data = data, error == nil else { return completion(nil, error) }
+            
             do {
-                let _serializer = self.serializer(for: type)
-                let payload = try _serializer.parse(response) as [JSON]
-                let normalized = try _serializer.normalize(response: payload, for: type, requestType: requestType)
-                completion(RecordArray(self.push(records: normalized), meta: normalized.meta), nil)
+                let records: RecordArray<T> = try self.serializer(for: type).normalize(response: data, for: type, request: request)
+                completion(try self.push(records: records), nil)
             } catch {
                 completion(nil, error)
             }
         }
     }
-    
-    private func handler<T: Record>(for type: T.Type, requestType: RequestType, completion: @escaping (T?, Error?) -> Void) -> (Any?, Error?) -> Void {
-        return { (response, error) in
-            guard error == nil else { return completion(nil, error) }
+
+    private func handler<T: Record>(for type: T.Type, request: Request, completion: @escaping (T?, Error?) -> Void) -> DataCompletion {
+        return { data, error in
+            guard let data = data, error == nil else { return completion(nil, error) }
+            
             do {
-                let _serializer = self.serializer(for: type)
-                let payload = try _serializer.parse(response) as JSON
-                let record = try _serializer.normalize(response: payload, for: type, requestType: requestType)
-                completion(self.push(record: record), nil)
+                let record: T = try self.serializer(for: type).normalize(response: data, for: type, request: request)
+                completion(try self.push(record: record), nil)
             } catch {
                 completion(nil, error)
             }
@@ -161,40 +170,40 @@ public final class Store {
         ```
     */
     @discardableResult func push<T: Record>(payload: JSON, for type: T.Type) throws -> T {
-        do {
-            let record = try serializer(for: type).normalize(type: type, hash: payload)
-            return push(record: record)
-        } catch {
-            throw error
-        }
+        let record = try serializer(for: type).normalize(type: type, hash: payload)
+        return try push(record: record)
     }
     
     /// Push a records into the store.
     /// - Parameter record: The record to push ito the store.
     /// - Returns: The pushed records.
-    @discardableResult func push<T: Record>(record: T) -> T {
+    @discardableResult func push<T: Record>(record: T) throws -> T {
+        guard record.id != nil else {
+            throw StoreError.invalidRecord("You cannot push a record without id into the store.")
+        }
         return recordManager.load(record)
     }
     
     /// Push some records into the store.
     /// - Parameter records: The records to push ito the store.
     /// - Returns: A `RecordArray` of the pushed records.
-    @discardableResult func push<S: Sequence & Collection, T: Record>(records: S) -> RecordArray<T> where S.Iterator.Element == T {
-        return RecordArray(records.map { self.push(record: $0) })
+    @discardableResult func push<S: Sequence & Collection, T: Record>(records: S) throws -> RecordArray<T> where S.Iterator.Element == T {
+        let _records = try records.map { try self.push(record: $0) }
+        return RecordArray(_records)
     }
     
     /// This method returns an instance of serializer for the specified type.
     /// - Parameter for: The record type class.
     /// - Returns: An instance of serializer for the specified type.
-    func serializer<T: Record>(for type: T.Type) -> SerializerType {
-        return instanceCache.get(cacheType: .serializer, type: type) as! SerializerType
+    func serializer<T: Record>(for type: T.Type) -> Serializer {
+        return instanceCache.get(cacheType: .serializer, type: type) as! Serializer
     }
     
     /// This method returns an instance of adapter for the specified type.
     /// - Parameter for: The record type class.
     /// - Returns: An instance of adapter for the specified type.
-    func adapter<T: Record>(for type: T.Type) -> AdapterType {
-        return instanceCache.get(cacheType: .adapter, type: type) as! AdapterType
+    func adapter<T: Record>(for type: T.Type) -> Adapter {
+        return instanceCache.get(cacheType: .adapter, type: type) as! Adapter
     }
     
     /// This method will remove the records from the store.
